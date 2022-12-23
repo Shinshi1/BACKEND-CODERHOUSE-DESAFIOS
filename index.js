@@ -1,4 +1,3 @@
-
 const fs = require('fs')
 
 class ProductManager {
@@ -75,8 +74,18 @@ class ProductManager {
     updateFile(id, obj) {
         this.products.map((product) => {
             if (product.code === id) {
-                // [...product, obj]
-            } 
+                product.title = obj.title;
+                product.description = obj.description;
+                product.price = obj.price;
+                product.thumbnail = obj.thumbnail;
+                product.code = id;
+                product.stock = obj.stock;
+            }
+            fs.writeFile('products.json', JSON.stringify(this.products),
+                (err) => {
+                    if (err) throw err;
+                    console.log(`producto con el ${id} actualizado con exito`)
+                })
         })
     }
 
@@ -109,4 +118,7 @@ console.log(gestionProd.addProduct(naranja))
 // gestionProd.readFile()
 // gestionProd.updateFile(1)
 // gestionProd.readFileProducts()
-gestionProd.updateFile(2)
+
+
+gestionProd.updateFile(2, { title: 'kiwi', description: 'cascara con pelos', price: 200, thumbnail: 'https://cdn.pixabay.com/photo/2016/03/05/23/02/breakfast-1239438_960_720.jpg', stock: 41 })
+console.log(gestionProd.getProducts())
