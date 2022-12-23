@@ -1,7 +1,9 @@
 
+const fs = require('fs')
+
 class ProductManager {
     static id = 0;
-    constructor(title, description, price, thumbnail, stock) {
+    constructor(title, description, price, thumbnail, stock, path) {
         this.products = []
         this.code = ProductManager.id++;
         this.title = title
@@ -9,6 +11,21 @@ class ProductManager {
         this.price = price
         this.thumbnail = thumbnail
         this.stock = stock
+        this.path = path
+    }
+    writeFileProducts() {
+        fs.writeFile('products.json', JSON.stringify(this.products),
+            (err) => {
+                if (err) throw err;
+                console.log('agregado con exito')
+            }
+        )
+    }
+    readFileProducts() {
+        fs.readFile('products.json', 'utf-8', (err, data) => {
+            if (err) throw err;
+            console.log(console.log(JSON.parse(data)))
+        })
     }
     addProduct(product) {
         let codeUsed = this.products.some(item => item.code === product.code)
@@ -42,6 +59,27 @@ class ProductManager {
             console.error(`no product found with id ${id}`)
         }
     }
+    deleteProduct(id) {
+        let arrayVacio = []
+        this.products.map((product) => {
+            if (product.code !== id) arrayVacio.push(product)
+
+
+            fs.writeFile('products.json', JSON.stringify(arrayVacio),
+                (err) => {
+                    if (err) throw err;
+                    console.log(`producto con el ${id} eliminado con exito`)
+                })
+        })
+    }
+    updateFile(id, obj) {
+        this.products.map((product) => {
+            if (product.code === id) {
+                // [...product, obj]
+            } 
+        })
+    }
+
 }
 
 
@@ -61,8 +99,14 @@ gestionProd.addProduct(limon)
 console.log(gestionProd.addProduct(naranja))
 
 // Busco un producto con un id existente y uno inexistente
-console.log(gestionProd.getProductById(1))
-console.log(gestionProd.getProductById(100))
+// console.log(gestionProd.getProductById(1))
+// console.log(gestionProd.getProductById(100))
 
 // Hago uso de la funcion getProducts para ver cuantos productos tengo en el array products
-console.table(gestionProd.getProducts())
+// console.table(gestionProd.getProducts())
+
+// gestionProd.writeFile()
+// gestionProd.readFile()
+// gestionProd.updateFile(1)
+// gestionProd.readFileProducts()
+gestionProd.updateFile(2)
