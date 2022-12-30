@@ -1,0 +1,18 @@
+[
+    {
+        "title": "naranja",
+        "description": "agria y muy dulce",
+        "price": 140,
+        "thumbnail": "https://cdn.pixabay.com/photo/2017/01/20/15/06/oranges-1995056_960_720.jpg",
+        "code": 1,
+        "stock": 23
+    },
+    {
+        "title": "durazno",
+        "description": "redonda dulce y peloso",
+        "price": 751,
+        "thumbnail": "https://cdn.pixabay.com/photo/2015/12/03/13/51/peach-1074997__340.jpg",
+        "code": 2,
+        "stock": 21
+    }
+]
