@@ -1,5 +1,4 @@
-const { read } = require('fs');
-const fsPromises = require('fs/promises')
+const fsPromises = require('fs').promises
 
 class ProductManager {
     static id = 0;
@@ -20,7 +19,7 @@ class ProductManager {
             const contentParse = JSON.parse(content);
             return contentParse
         } catch (error) {
-            console.error('no se logro leer el archivo')
+            console.error('Error: no se logro leer el archivo')
             throw new Error(error)
         }
     }
@@ -28,16 +27,16 @@ class ProductManager {
         //permite que veamos los productos en el documento
         const fileContent = await this.#readFileProducts()
         try {
-            if (fileContent.lenght === 0) console.log('no se encontraron productos en el archivo')
-            else console.log(fileContent)
+            if (fileContent.length === 0) console.log('no se encontraron productos en el archivo')
+            return fileContent
         } catch (error) {
-            console.error('no se encontraron productos en el archivo')
+            console.error('Error: no se encontraron productos en el archivo')
             throw new Error(error)
         }
     }
     async writeFileProducts(data) {
         try {
-            fsPromises.writeFile('DB/products.json', JSON.stringify(data))
+            await fsPromises.writeFile('DB/products.json', JSON.stringify(data))
             console.log('productos escritos con exito')
         } catch (error) {
             throw new Error(error)
@@ -59,12 +58,11 @@ class ProductManager {
                     stock: product.stock,
                 })
                 console.log(`Producto ${product.title} agregado`)
-                this.writeFileProducts(fileContent)
+                await this.writeFileProducts(fileContent)
 
             } else {
                 console.error(`Error: Code repetido. El code ${product.code} ya esta en uso`)
             }
-
         } catch (error) {
             console.error('Error: No se pudo agregar el producto')
             throw new Error(error)
@@ -80,26 +78,26 @@ class ProductManager {
                 console.log(`producto con id: ${id} es...`, productFound)
                 return productFound
             } else {
-                console.error(`no se encontro un producto con el id ${id}`)
+                console.error(`Error: no se encontro un producto con el id ${id}`)
             }
         } catch (error) {
-            console.error(`no se encontro un producto con el id ${id}`)
+            console.error(`Error: no se encontro un producto con el id ${id}`)
             throw new Error(error)
         }
     }
     async deleteProduct(id) {
-        const fileContent = await this.#readFileProducts()
-        let newProductList = []
+        let fileContent = await this.#readFileProducts()
+        let productFound = fileContent.find((product) => product.code === id)
+        if (!productFound) {
+            console.log(`no se encontro el producto con el id: ${id}`)
+            return
+        }
         try {
-            fileContent.map((product) => {
-                if (product.code !== id) {
-                    newProductList.push(product)
-                    console.log(`producto con el ${id} eliminado con exito`)
-                    this.writeFileProducts(newProductList)
-                } 
-            })
+            let newProductList = fileContent.filter((product) => product.code !== id);
+            await this.writeFileProducts(newProductList)
+            console.log(`producto con el ${id} eliminado con exito`)
         } catch (error) {
-            console.error(`no se ha podido eliminar el producto con id ${id}`)
+            console.error(`Error: no se ha podido eliminar el producto con id ${id}`)
             throw new Error(error)
         }
     }
@@ -117,14 +115,13 @@ class ProductManager {
                 }
                 this.writeFileProducts(fileContent)
             })
-            
         } catch (error) {
-            console.error(`producto con el ${id} actualizado con exito`)
+            console.error(`Error: producto con el ${id} actualizado con exito`)
             throw new Error(error)
         }
     }
-
 }
+
 
 
 const gestionProd = new ProductManager()
@@ -135,17 +132,18 @@ const banana = new ProductManager('banana', 'muy dulce', 200, 'https://cdn.pixab
 const limon = new ProductManager('limón', 'muy agrio y jugoso', 190, 'https://cdn.pixabay.com/photo/2015/10/13/15/16/lemons-986304__340.jpg', 19)
 
 // TEST
-gestionProd.addProduct(naranja)
-gestionProd.addProduct(banana)
-gestionProd.addProduct(limon)
 
-// const testAsync = async () => {
-//     gestionProd.writeFileProducts()
-// }
-// testAsync()
-gestionProd.getProducts()
+// Agregar Productos
 
-gestionProd.updateFile(2, {title: 'durazno', description: 'redonda dulce y peloso', price: 751, thumbnail: 'https://cdn.pixabay.com/photo/2015/12/03/13/51/peach-1074997__340.jpg', code: 4, stock: 21})
+// gestionProd.addProduct(banana)
+// gestionProd.addProduct(naranja)
+// gestionProd.addProduct(limon)
+
+// Borrar Productos
+
+// gestionProd.deleteProduct(3)
+// gestionProd.deleteProduct(2)
+// gestionProd.deleteProduct(1)
 
 module.exports = {
     gestionProd

@@ -1,10 +1,10 @@
 const express = require('express');
-const { gestionProd } = require('./clases/ProductManager');
+const { gestionProd } = require('./clases/ProductManagerAsync');
 const app = express();
 const port = 8080;
 
-app.get('/products', (req, res) => {
-    const products = gestionProd.readFileProducts();
+app.get('/products', async (req, res) => {
+    const products = await gestionProd.getProducts()
     const limit = req.query.limit;
     let respuesta = products
     // si hay query de limit, limitar la cantidad de productos que voy a devolver con array.prototype.slice
@@ -14,9 +14,9 @@ app.get('/products', (req, res) => {
     res.send(respuesta);
 });
 
-app.get('/products/:pid', (req, res) => {
+app.get('/products/:pid', async (req, res) => {
     const { pid } = req.params;
-    const products = gestionProd.readFileProducts();
+    const products = await gestionProd.getProducts();
     const product = products.find((p) => p.code === Number(pid));
     res.send(product);
 });
