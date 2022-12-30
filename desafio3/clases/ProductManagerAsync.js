@@ -24,7 +24,6 @@ class ProductManager {
         }
     }
     async getProducts() {
-        //permite que veamos los productos en el documento
         const fileContent = await this.#readFileProducts()
         try {
             if (fileContent.length === 0) console.log('no se encontraron productos en el archivo')
