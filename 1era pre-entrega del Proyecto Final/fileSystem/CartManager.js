@@ -60,6 +60,46 @@ class CartManager {
             throw new Error(error)
         }
     }
+    async addToCart(cart, product) {
+        const fileContent = await this.#readFileCarts()
+        // agregar el producto al carrito
+        try {
+                let cartFoundIndex = fileContent.findIndex((c) => c.id === cart.id)
+                let productFoundIndex = fileContent[cartFoundIndex].products.findIndex((p) => p.id === product.id)
+                let productNotExist = true
+                if(fileContent[cartFoundIndex].products[productFoundIndex]) {
+                    fileContent[cartFoundIndex].products[productFoundIndex].quantity = fileContent[cartFoundIndex].products[productFoundIndex].quantity + 1
+                    this.writeFileCarts(fileContent) // ver si puedo poner un solo writeFile al final de los if
+                    console.log('se aumenta el valor quantity')
+                } else if(productNotExist) {
+                    fileContent[cartFoundIndex].products.push(product)
+                    this.writeFileCarts(fileContent)
+                    console.log('product added to cart')
+                    console.log('sea agreaga un product al array')   
+                }
+                console.log('afuera de los if')
+
+            } catch (error) {
+                console.error(`Error: product not added to cart with ${cart.id}`)
+                throw new Error(error)
+            }
+    }
+    async getCartById(id) {
+        const fileContent = await this.#readFileCarts()
+        // retornar el producto que cuente con este id
+        let cartFound = fileContent.find(cart => cart.id === id)
+        try {
+            if (cartFound) {
+                console.log(`cart with id: ${id} found`)
+                return cartFound
+            } else {
+                console.error(`Error: not cart found with id ${id}`)
+            }
+        } catch (error) {
+            console.error(`Error: not cart found with id ${id}`)
+            throw new Error(error)
+        }
+    }
 }
 
 const gestionCart = new CartManager()

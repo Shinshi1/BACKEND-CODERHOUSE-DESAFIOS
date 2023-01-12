@@ -3,7 +3,8 @@ const express = require('express')
 const cartsRouter = express.Router()
 
 // import File System
-const { gestionCart } = require('../fileSystem/CartManager')
+const { gestionCart } = require('../fileSystem/CartManager');
+const { gestionProd } = require('../fileSystem/ProductManager');
 
 // Methods
 cartsRouter.post('/', (req, res) => {
@@ -26,17 +27,23 @@ cartsRouter.get('/:cid', async (req, res) => {
     console.error('Error: cart not found with that cid')
 });
 
-cartsRouter.post('/:cid/product/:pid', (req, res) => {
-    const carritoId = req.params.cid
-    const productoId = req.params.pid
+cartsRouter.post('/:cid/product/:pid', async (req, res) => {
+    const cid = req.params.cid
+    const pid = req.params.pid
     // agregar el producto al carrito
-    // const carts = ...
-    cart = carts.find((c) => c.id === Number(carritoId))
-    const product = {
-        code: Number(productoId),
+       
+    let cart = await gestionCart.getCartById(Number(cid))
+    let product = await gestionProd.getProductById(Number(pid))
+
+    const productAdd = {
+        id: product.id,
         quantity: 1
     }
-    cart.push(Number(productoId))
+    // console.log('este es el producto', product)
+    // agregar if que controle que no se pueda agregar mas del stock del producto
+    gestionCart.addToCart(cart, productAdd)
+
+    // cart.products.push(Number(pid))
     res.status(200).send('product added to cart')
 });
 
