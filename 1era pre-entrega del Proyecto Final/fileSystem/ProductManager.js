@@ -1,4 +1,4 @@
-// import package
+// import File System
 const fsPromises = require('fs').promises
 
 class ProductManager {
@@ -94,7 +94,7 @@ class ProductManager {
         const fileContent = await this.#readFileProducts()
         try {
             let productFoundIndex = fileContent.findIndex((p) => p.id === id)
-            fileContent[productFoundIndex] = {id: id, ...obj}
+            fileContent[productFoundIndex] = { id: id, ...obj }
             this.writeFileProducts(fileContent)
             console.log('product updated')
         } catch (error) {
