@@ -1,8 +1,7 @@
-// imports packages
+// --- imports packages ---
 const express = require('express')
 const app = express()
 const cors = require('cors')
-
 // imports routes
 const {cartsRouter} = require('./routes/cartsRouter')
 const {productsRouter} = require('./routes/productsRouter')

@@ -2,6 +2,9 @@
 const express = require('express')
 const cartsRouter = express.Router()
 
+// import File System
+const { gestionProd } = require('../fileSystem/ProductManager')
+
 // Methods
 cartsRouter.post('/', (req, res) => {
     // crear el carrito
