@@ -27,15 +27,9 @@ productsRouter.get('/:pid', async (req, res) => {
 productsRouter.post('/', async (req, res) => {
     // deberá agregar un nuevo producto con sus campos correspondientes.
     const products = await gestionProd.getProducts()
-    const idGenerator = () => {
-        let id = 1
-        const lastProduct = products[products.length - 1]
-        if (lastProduct) {id = lastProduct.id + 1}
-        return id
-    }
 
     const product = {
-        id: idGenerator(),
+        id: 1,
         title: req.body.title,
         description: req.body.description,
         code: String(req.body.code),

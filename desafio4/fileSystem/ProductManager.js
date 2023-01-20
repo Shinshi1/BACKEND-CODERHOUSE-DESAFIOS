@@ -36,10 +36,20 @@ class ProductManager {
         const fileContent = await this.#readFileProducts()
         let codeUsed = fileContent.some(item => item.code === product.code)
 
+        const idGenerator = () => {
+            let id = 1
+            const lastProduct = fileContent[fileContent.length - 1]
+            if (lastProduct) { id = lastProduct.id + 1 }
+            return id
+        }
+
         try {
             // agregar un producto
             if (product.title && product.description && product.price && product.thumbnail && product.code && product.stock && !codeUsed) {
-                fileContent.push(product)
+                fileContent.push({
+                    id: idGenerator(),
+                    ...product
+                })
                 console.log(`Producto ${product.title} agregado`)
                 await this.writeFileProducts(fileContent)
 
