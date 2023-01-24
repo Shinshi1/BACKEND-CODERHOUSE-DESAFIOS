@@ -51,22 +51,26 @@ app.get('/realtimeproducts', async (req, res) => {
     const products = await gestionProd.getProducts()
     res.status(200).render('realtimeproducts', { products: products })
 })
-/*
-app.post('/realtimeproducts', async(req, res) => {
-    socketServer.on('connection', (socket) => {
-        socket.on('productContent', (updatedProducts) => {
-            res.status(200).render('realtimeproducts', { products: updatedProducts })
-        })
-    })
-})
-*/
+
+let addedProducts = []
 // Eventos Websockets
-socketServer.on('connection', (socket) => {
+socketServer.on('connection', async(socket) => {
     socket.on('productReceived', async (data) => {
-        // pReceived => producto recibido del frontend
-        pReceived = data;
+        // data => producto recibido del frontend
         await gestionProd.addProduct(data)
-        socket.emit('productContent', await gestionProd.getProducts())
+        addedProducts.push(data)
+        socketServer.emit('addedProducts', addedProducts)
+    })
+
+    // code de producto a eliminar - eliminamos del products.json
+    socket.on('productDelete', async (data) => {
+        const products = await gestionProd.getProducts()
+        const productDelete = products.find(p => p.code === data)
+        if (!Boolean(productDelete)) {
+            console.error('Error: product not found')
+            return
+        } 
+        await gestionProd.deleteProduct(productDelete.id)
     })
 
 })

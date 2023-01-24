@@ -34,12 +34,13 @@
             <input type="text" id="thumbnail" name="product_thumbnail"></input>
         </li>
     </ul>
-    <button type="submit">Enviar</button>
+    <button id="btnAgregar">Agregar</button>
+    <button id="btnEliminar">Eliminar</button>
 </form>
 
 <h2>Lista de Productos</h2>
 {{#each products}}
-<ul>
+<ul data-code="{{code}}">
     <li>name: {{title}}</li>
     <li>description: {{description}}</li>
     <li>code: {{code}}</li>
@@ -50,6 +51,9 @@
     {{!-- <li>{{this.thumbnail}}</li> --}}
 </ul>
 {{/each}}
+<div id="productContainer">
+
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realtimeproducts.js"></script>
