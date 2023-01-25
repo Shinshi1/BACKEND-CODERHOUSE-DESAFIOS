@@ -4,6 +4,7 @@ const handlebars = require('express-handlebars')
 const { Server } = require('socket.io')
 const app = express()
 const cors = require('cors')
+const {sockets} = require('./sockets')
 
 
 // imports routes
@@ -11,6 +12,7 @@ const { cartsRouter } = require('./routes/cartsRouter')
 const { productsRouter } = require('./routes/productsRouter')
 // products
 const { gestionProd } = require('./fileSystem/ProductManager')
+
 let products = []
 const fetchProducts = async () => {
     try {
@@ -52,29 +54,4 @@ app.get('/realtimeproducts', async (req, res) => {
     res.status(200).render('realtimeproducts', { products: products })
 })
 
-let addedProducts = []
-// Eventos Websockets
-socketServer.on('connection', async(socket) => {
-    socket.on('productReceived', async (data) => {
-        // data => producto recibido del frontend
-        await gestionProd.addProduct(data)
-        addedProducts.push(data)
-        socketServer.emit('addedProducts', addedProducts)
-    })
-
-    // code de producto a eliminar - eliminamos del products.json
-    socket.on('productDelete', async (data) => {
-        const products = await gestionProd.getProducts()
-        const productDelete = products.find(p => p.code === data)
-        if (!Boolean(productDelete)) {
-            console.error('Error: product not found')
-            return
-        } 
-        await gestionProd.deleteProduct(productDelete.id)
-    })
-
-})
-
-module.exports = {
-    socketServer,
-}
+sockets(socketServer)
