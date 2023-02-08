@@ -52,7 +52,7 @@ socket.on('messageLogs', (data) => {
         `;
     });
 
-    log.innerHTML = message;
+    log.innerHTML += message;
 });
 
 // Notificación de nuevo usuario conectado ↓

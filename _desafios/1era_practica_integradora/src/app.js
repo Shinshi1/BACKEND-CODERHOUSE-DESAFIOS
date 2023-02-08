@@ -65,7 +65,7 @@ app.use('/chat', chatRouter)
 app.use('/messages', messageRoute)
 
 // socketMessage = propaga los msj tanto localmente como desde mongoDB
-app.post('/socketMessage', (req, res) => {
+app.post('/chat', (req, res) => {
     const { message } = req.body;
     socketServer.emit('message', message);
 
