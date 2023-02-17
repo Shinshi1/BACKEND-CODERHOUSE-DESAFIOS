@@ -92,7 +92,7 @@ class CartManager {
 
 	async findByID(cartId) {
 		try {
-			const cart = await cartModel.findById(cartId)
+			const cart = await cartModel.findById(cartId).populate('products.productId')
 			// console.log('cart', JSON.stringify(cart, null, '\t') )
 			return cart
 		} catch (error) {
