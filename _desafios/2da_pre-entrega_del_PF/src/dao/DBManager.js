@@ -26,7 +26,7 @@ class CartManager {
 
 	async delete(cartId) {
 		try {
-			const result = await cartModel.findByIdAndDelete(cartId)
+			const result = await AndDelete(cartId)
 			return result
 		} catch (error) {
 			throw new Error(error)
@@ -60,6 +60,41 @@ class CartManager {
 				const updatedResult = await cartModel.findOneAndUpdate({ _id: cartId, "products._id": myProduct._id }, { $inc: { "products.$.quantity": 1 } }, { new: true })
 				return updatedResult
 			}
+		} catch (error) {
+			throw new Error(error)
+		}
+	}
+
+	async deleteProduct(cartId, productId) {
+		try {
+			const newCart = await cartModel.updateOne({ _id: cartId }, { $pull: { products: { _id: productId } } })
+			return newCart
+		} catch (error) {
+			throw new Error(error)
+		}
+	}
+
+	async updateProduct(cartId, productId, quantity) {
+		try {
+			await cartModel.updateOne({ id: cartId, 'products._id': productId }, { $inc: { 'products.$.quantity': quantity } })
+		} catch (error) {
+			throw new Error(error)
+		}
+	}
+
+	async deleteAllProducts(cartId) {
+		try {
+			await cartModel.updateOne({ id: cartId }, { $set: { products: [] } })
+		} catch (error) {
+			throw new Error(error)
+		}
+	}
+
+	async findByID(cartId) {
+		try {
+			const cart = await cartModel.findById(cartId)
+			// console.log('cart', JSON.stringify(cart, null, '\t') )
+			return cart
 		} catch (error) {
 			throw new Error(error)
 		}
@@ -143,3 +178,17 @@ module.exports = {
 	CartManager,
 	ProductManager
 }
+
+// const deleteInterest = (req, res) => {
+// 	const userId = req.params.userId;
+// 	const interestId = req.params.interestId;
+
+// 	User.updateOne({ _id: userId }, { $pull: { interests: { _id: interestId } } })
+// 		.then(() => {
+// 			res.status(200).send(`Interest ${interestId} deleted from user ${userId}`);
+// 		})
+// 		.catch((error) => {
+// 			console.error(error);
+// 			res.status(500).send(error);
+// 		});
+// };

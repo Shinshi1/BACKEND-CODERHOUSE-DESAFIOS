@@ -4,14 +4,14 @@ const mongooseAggregatePaginate = require('mongoose-aggregate-paginate-v2')
 
 const schemaOptions = {
     versionKey: false
-  };  
+};
 
 const productCollection = 'products';
 
 const productSchema = new mongoose.Schema({
     title: String,
     description: String,
-    code: {type: String, unique: true},
+    code: { type: String, unique: true },
     price: Number,
     thumbnail: String,
     stock: Number,
