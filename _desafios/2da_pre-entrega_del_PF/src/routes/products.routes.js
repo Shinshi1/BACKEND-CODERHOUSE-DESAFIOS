@@ -8,10 +8,11 @@ const productManager = new ProductManager()
 
 // Methods
 productsRouter.get('/', async (req, res) => {
-    const {limit, page, category, status} = req.query;
+    const {limit, page, category, status, sort} = req.query;
     // const {category} = req.params;
     try {
-        let product = await productManager.read(page, limit, category, status)
+        let product = await productManager.read(page, limit, category, status, sort)
+        // console.log('products.routes.js', product)
         const productExist = () => {
             if (Boolean(product.docs)) return 'success'
             else return 'error'

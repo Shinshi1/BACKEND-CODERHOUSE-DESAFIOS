@@ -68,20 +68,35 @@ class CartManager {
 
 
 class ProductManager {
-	async read(page, limit, category, status) {
-		const options = {
+	async read(page, limit, category, status, sort) {
+		let options = {
 			page: page || 1,
 			limit: limit || 10
 		}
 		try {
 			if (category) {
-				const products = await productModel.paginate({category: category}, options)
+				const products = await productModel.paginate({ category: category }, options)
 				return products
 			}
 
-			if(status) {
-				const products = await productModel.paginate({status: status}, options)
+			if (status) {
+				const products = await productModel.paginate({ status: status }, options)
 				return products
+			}
+
+			if (sort) {
+				if (sort === 'asc') {
+					options.sort = { price: 1 }
+					console.log(options)
+
+					const products = await productModel.paginate({}, options)
+					return products
+				}
+				if (sort === 'desc') {
+					options.sort = { price: -1 }
+					const products = await productModel.paginate({}, options)
+					return products
+				}
 			}
 
 			const products = await productModel.paginate({}, options)
