@@ -26,7 +26,7 @@ class CartManager {
 
 	async delete(cartId) {
 		try {
-			const result = await AndDelete(cartId)
+			const result = await cartModel.findByIdAndDelete(cartId)
 			return result
 		} catch (error) {
 			throw new Error(error)
@@ -40,25 +40,18 @@ class CartManager {
 		}
 
 		try {
-			const resultArray = await cartModel.find({ _id: cartId })
-			const result = resultArray[0]
+			const cart = await cartModel.findById(cartId)
 
-			if (result.products.length === 0) {
-				// if !productExist
-				result.products.push(myProduct)
-				const savedResult = await result.save()
-				return savedResult
-			}
-			const index = result.products.findIndex((product) => product._id === myProduct._id)
-			if (index === -1) {
-				// if !productExist
-				result.products.push(myProduct)
-				const savedResult = await result.save()
-				return savedResult
+			const productIndex = cart.products.findIndex(product => product._id.toString() === myProduct._id)
+
+			if(productIndex === -1) {
+				cart.products.push(myProduct);
+				const savedCart = await cart.save()
+				return savedCart
 			} else {
-				// if productExist
-				const updatedResult = await cartModel.findOneAndUpdate({ _id: cartId, "products._id": myProduct._id }, { $inc: { "products.$.quantity": 1 } }, { new: true })
-				return updatedResult
+				cart.products[productIndex].quantity++;
+				const savedCart = await cart.save()
+				return savedCart
 			}
 		} catch (error) {
 			throw new Error(error)
@@ -92,7 +85,7 @@ class CartManager {
 
 	async findByID(cartId) {
 		try {
-			const cart = await cartModel.findById(cartId).populate('products.productId')
+			const cart = await cartModel.findById(cartId).populate('products._id')
 			// console.log('cart', JSON.stringify(cart, null, '\t') )
 			return cart
 		} catch (error) {
