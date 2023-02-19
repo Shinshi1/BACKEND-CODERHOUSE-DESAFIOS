@@ -25,42 +25,49 @@ const pagination = (data) => {
     if (inputPage.value < data.totalPages)
       inputPage.value++
 
+      eventUploadFetch()
   })
   prevPageButton.addEventListener('click', () => {
     if (inputPage.value > 1)
       inputPage.value--
 
+     eventUploadFetch()
   })
 
   inputPage.addEventListener('change', () => {
-    fetch(`${API_URL}?page=${inputPage.value}`)
-      .then(res => res.json())
-      .then(data => {
-        productContainer.innerHTML = '';
-
-        let product = ''
-        data.payload.forEach(item => {
-          product += `
-    <div class="card-item" data-code="${item.code}">
-      <div class="card-img">
-          <img src="${item.thumbnail}"
-              alt="${item.title}">
-      </div>
-      <div class="card-details">
-          <h5>${item.title}</h5>
-          <p>${item.description}.</p>
-          <span>Price: $${item.price}</span> <br>
-          <button>Agregar al carrito</button>
-      </div>
-    </div>
-    `
-        });
-        productContainer.innerHTML = product;
-        // pagination
-        pagination(data)
-      })
-      .catch(error => console.error( error))
+    eventUploadFetch()
   })
+
+}
+
+const eventUploadFetch = () => {
+  fetch(`${API_URL}?page=${inputPage.value}`)
+    .then(res => res.json())
+    .then(data => {
+      productContainer.innerHTML = '';
+
+      let product = ''
+      data.payload.forEach(item => {
+        product += `
+<div class="card-item" data-code="${item.code}">
+  <div class="card-img">
+      <img src="${item.thumbnail}"
+          alt="${item.title}">
+  </div>
+  <div class="card-details">
+      <h5>${item.title}</h5>
+      <p>${item.description}.</p>
+      <span>Price: $${item.price}</span> <br>
+      <button>Agregar al carrito</button>
+  </div>
+</div>
+`
+      });
+      productContainer.innerHTML = product;
+      // pagination
+      pagination(data)
+    })
+    .catch(error => console.error(error))
 }
 
 fetch(API_URL)

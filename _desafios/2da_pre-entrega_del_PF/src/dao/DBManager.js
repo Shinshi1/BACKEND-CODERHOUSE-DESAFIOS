@@ -68,7 +68,7 @@ class CartManager {
 
 	async updateProduct(cartId, productId, quantity) {
 		try {
-			await cartModel.updateOne({ id: cartId, 'products._id': productId }, { $inc: { 'products.$.quantity': quantity } })
+			await cartModel.updateOne({ id: cartId, 'products.product': productId }, { $inc: { 'products.$.quantity': quantity } })
 		} catch (error) {
 			throw new Error(error)
 		}
