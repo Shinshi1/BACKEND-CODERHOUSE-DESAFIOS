@@ -35,16 +35,15 @@ class CartManager {
 
 	async update(cartId, product) {
 		const myProduct = {
-			_id: product._id,
+			product: product._id,
 			quantity: 1,
 		}
 
 		try {
 			const cart = await cartModel.findById(cartId)
+			const productIndex = cart.products.findIndex(product => product.product.toString() === myProduct.product)
 
-			const productIndex = cart.products.findIndex(product => product._id.toString() === myProduct._id)
-
-			if(productIndex === -1) {
+			if (productIndex === -1) {
 				cart.products.push(myProduct);
 				const savedCart = await cart.save()
 				return savedCart
@@ -85,7 +84,7 @@ class CartManager {
 
 	async findByID(cartId) {
 		try {
-			const cart = await cartModel.findById(cartId).populate('products._id')
+			const cart = await cartModel.findById(cartId).populate('products.product')
 			// console.log('cart', JSON.stringify(cart, null, '\t') )
 			return cart
 		} catch (error) {
