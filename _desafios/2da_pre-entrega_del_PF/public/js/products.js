@@ -1,4 +1,4 @@
-const API_URL = '/api/products';
+const API_URL = '/api/products/';
 
 // DOM
 // products
@@ -8,40 +8,28 @@ const prevPageButton = document.querySelector('#prevPage-button');
 const nextPageButton = document.querySelector('#nextPage-button');
 const inputPage = document.querySelector('#inputPage')
 
-const pagination = (data) => {
-  console.log('pagination funciona')
+const pagination = ({ data, nextPageClickHandler, prevPageClickHandler, inputPageChangeHandler, inputPageInputHandler }) => {
+  inputPage.value = data.page
   inputPage.setAttribute('max', data.totalPages)
-  inputPage.addEventListener('input', () => {
-    if (parseInt(inputPage.value) > parseInt(inputPage.max)) {
-      inputPage.value = inputPage.max;
-    }
+  inputPage.addEventListener('input', inputPageInputHandler)
 
-    if (parseInt(inputPage.value) < 1) {
-      inputPage.value = 1;
-    }
-  })
+  nextPageButton.addEventListener('click', nextPageClickHandler)
 
-  nextPageButton.addEventListener('click', () => {
-    if (inputPage.value < data.totalPages)
-      inputPage.value++
+  prevPageButton.addEventListener('click', prevPageClickHandler)
 
-      eventUploadFetch()
-  })
-  prevPageButton.addEventListener('click', () => {
-    if (inputPage.value > 1)
-      inputPage.value--
+  inputPage.addEventListener('change', inputPageChangeHandler)
+}
 
-     eventUploadFetch()
-  })
-
-  inputPage.addEventListener('change', () => {
-    eventUploadFetch()
-  })
+const removePaginationHandlers = ({ nextPageClickHandler, prevPageClickHandler, inputPageChangeHandler, inputPageInputHandler }) => {
+  nextPageButton.removeEventListener('click', nextPageClickHandler)
+  prevPageButton.removeEventListener('click', prevPageClickHandler)
+  inputPage.removeEventListener('change', inputPageChangeHandler)
+  inputPage.removeEventListener('input', inputPageInputHandler)
 
 }
 
-const eventUploadFetch = () => {
-  fetch(`${API_URL}?page=${inputPage.value}`)
+const eventUploadFetch = (page) => {
+  fetch(`${API_URL}?page=${page}`)
     .then(res => res.json())
     .then(data => {
       productContainer.innerHTML = '';
@@ -65,63 +53,70 @@ const eventUploadFetch = () => {
       });
       productContainer.innerHTML = product;
       // pagination
-      pagination(data)
+
+      const nextPageClickHandler = () => {
+        let pageNext = data.nextLink;
+        let page = Number(inputPage.value);
+        if (data.hasNextPage) {
+          page = pageNext;
+          removePaginationHandlers({ nextPageClickHandler, prevPageClickHandler, inputPageChangeHandler, inputPageInputHandler })
+          eventUploadFetch(page);
+        }
+      }
+
+      const prevPageClickHandler = () => {
+        let pagePrev = data.prevLink
+        if (data.hasPrevPage) {
+          page = pagePrev
+          removePaginationHandlers({ nextPageClickHandler, prevPageClickHandler, inputPageChangeHandler, inputPageInputHandler })
+          eventUploadFetch(page)
+        }
+
+      }
+
+      const inputPageChangeHandler = () => {
+        if (page > data.totalPages) {
+          page = data.totalPages;
+          inputPage.value = page;
+        } else if (page < 1) {
+          page = 1;
+          inputPage.value = page;
+        } else {
+          page = inputPage.value
+        }
+
+
+        removePaginationHandlers({ nextPageClickHandler, prevPageClickHandler, inputPageChangeHandler, inputPageInputHandler })
+        eventUploadFetch(page)
+      }
+
+      const inputPageInputHandler = () => {
+        debugger
+        console.log('event input')
+        if (page > data.totalPages) {
+          page = inputPage.max;
+        } else if (page < 1) {
+          page = 1;
+        } else {
+          page = inputPage.value
+        }
+
+
+        removePaginationHandlers({ nextPageClickHandler, prevPageClickHandler, inputPageChangeHandler, inputPageInputHandler })
+        eventUploadFetch(page)
+      }
+
+      removePaginationHandlers({ nextPageClickHandler, prevPageClickHandler, inputPageChangeHandler, inputPageInputHandler })
+
+      pagination({
+        data,
+        nextPageClickHandler,
+        prevPageClickHandler,
+        inputPageChangeHandler,
+        inputPageInputHandler
+      });
     })
     .catch(error => console.error(error))
 }
 
-fetch(API_URL)
-  .then(res => res.json())
-  .then(data => {
-    console.log(data)
-    // products
-    let product = ''
-    data.payload.forEach(item => {
-      product += `
-      <div class="card-item" data-code="${item.code}">
-        <div class="card-img">
-            <img src="${item.thumbnail}"
-                alt="${item.title}">
-        </div>
-        <div class="card-details">
-            <h5>${item.title}</h5>
-            <p>${item.description}.</p>
-            <span>Price: $${item.price}</span> <br>
-            <button>Agregar al carrito</button>
-        </div>
-      </div>
-      `
-    });
-    productContainer.innerHTML = product;
-
-    // pagination
-    pagination(data)
-  })
-  .catch(error => console.error(error))
-
-/*
-fetch(`${API_URL}?page=${data.nextLink}`)
-      .then(res => res.json())
-      .then(data => {
-        productContainer.innerHTML = '';
-
-        let product = ''
-        data.payload.forEach(item => {
-          product += `
-    <div class="card-item" data-code="${item.code}">
-      <div class="card-img">
-          <img src="${item.thumbnail}"
-              alt="${item.title}">
-      </div>
-      <div class="card-details">
-          <h5>${item.title}</h5>
-          <p>${item.description}.</p>
-          <span>Price: $${item.price}</span> <br>
-          <button>Agregar al carrito</button>
-      </div>
-    </div>
-    `
-        });
-        productContainer.innerHTML = product;
-      })
-*/
+eventUploadFetch(1)

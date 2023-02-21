@@ -81,6 +81,10 @@ app.get('/products', async (req, res) => {
     res.status(200).render('products', { stylesheet: 'products' })
 })
 
+app.get('/carts/:cid', async (req, res) => {
+    res.status(200).render('carts', { stylesheet: 'carts' })
+})
+
 app.get('/realtimeproducts', async (req, res) => {
     const products = await gestionProd.getProducts()
     res.status(200).render('realtimeproducts', { products: products })
