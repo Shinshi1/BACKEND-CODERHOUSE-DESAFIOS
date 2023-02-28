@@ -4,6 +4,10 @@ const express = require('express')
 const app = express()
 // express-handlebars
 const handlebars = require('express-handlebars')
+// express-session
+const session = require('express-session')
+// cookie-parser
+const cookieParser = require('cookie-parser')
 // socket.io & socketEvents & new-messages
 const { Server } = require('socket.io')
 const { sockets, messages } = require('./sockets')
@@ -21,6 +25,7 @@ const { chatRouter } = require('./routes/chat.routes.js')
 // products
 const { gestionProd } = require('./dao/fileSystem/ProductManager')
 const { messageRoute } = require('./routes/message.routes')
+const MongoStore = require('connect-mongo')
 
 let products = []
 const fetchProducts = async () => {
@@ -38,6 +43,7 @@ const DB_USER = process.env.DB_USER;
 const DB_PASS = process.env.DB_PASS;
 const DB_NAME = process.env.DB_NAME;
 const PORT = process.env.PORT || 8080;
+const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.p8sktwl.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
 // port
 const httpServer = app.listen(PORT, () => console.log(`listening on http://localhost:${PORT}`))
@@ -51,12 +57,25 @@ const socketServer = new Server(httpServer)
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
+
 // view engine
 app.engine('handlebars', handlebars.engine())
 app.set('view engine', 'handlebars')
 app.set('views', __dirname + '/views')
 // static archives
 app.use(express.static('public'))
+// connect-mongo
+app.use(session({
+    store: MongoStore.create({
+        secret: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0',
+        resave: true,
+        saveUninitialized: true,
+        mongoUrl: STRING_CONNECTION,
+        mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+        ttl: 30,
+    })
+}))
 
 // routes
 app.use('/api/products', productsRouter)
@@ -103,7 +122,7 @@ app.get('/messages', (req, res) => {
 const enviroment = async () => {
     mongoose.set('strictQuery', true)
     try {
-        await mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.p8sktwl.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`,);
+        await mongoose.connect(STRING_CONNECTION);
         console.log('Conectado a MongoDB')
     } catch (error) {
         console.error(`Error: error al conectar a mongoDB... ${error}`)
