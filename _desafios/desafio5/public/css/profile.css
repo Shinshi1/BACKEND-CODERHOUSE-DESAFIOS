@@ -1,0 +1,21 @@
+body {
+  background-color: rgb(120, 162, 240);
+}
+
+.logout-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.logout-container button {
+  padding: .2rem .5rem;
+  border-radius: .2rem;
+  border: 1px solid #474747;
+  background-color: thistle;
+  cursor: pointer;
+}
+
+.logout-container button:active {
+  scale: .9;
+}

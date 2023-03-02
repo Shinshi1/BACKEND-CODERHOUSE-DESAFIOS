@@ -1,12 +1,20 @@
 const API_URL = '/api/products/';
-
+const SESSION_URL = '/sessions'
+let user
 // DOM
+// icon profile
+const iconProfile = document.querySelector('#icon-profile')
 // products
 const productContainer = document.querySelector('#productContainer')
 // pagination
 const prevPageButton = document.querySelector('#prevPage-button');
 const nextPageButton = document.querySelector('#nextPage-button');
 const inputPage = document.querySelector('#inputPage')
+
+iconProfile.addEventListener('click', () => {
+  window.location.pathname = '/profile'
+})
+
 
 const pagination = ({ data, nextPageClickHandler, prevPageClickHandler, inputPageChangeHandler, inputPageInputHandler }) => {
   inputPage.value = data.page
@@ -120,3 +128,13 @@ const eventUploadFetch = (page) => {
 }
 
 eventUploadFetch(1)
+
+fetch(SESSION_URL)
+  .then(res => res.json())
+  .then(data => {
+    Swal.fire({
+      title: `Bienvenido ${data.user.first_name} ${data.user.last_name}`,
+    })
+  })
+  .catch(error => console.log(error))
+
