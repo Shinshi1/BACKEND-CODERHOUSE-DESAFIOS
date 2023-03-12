@@ -1,6 +1,7 @@
 const { Router } = require('express')
 const userModel = require('../dao/models/users.model.js');
 const { requireNoAuth } = require('../middlewares.js');
+const { createHash } = require('../utils.js');
 
 const router = Router();
 
@@ -15,7 +16,7 @@ router.post('/', requireNoAuth, async (req, res) => {
       first_name,
       last_name,
       email,
-      password,
+      password: createHash(password),
       age
     });
     // res.redirect('/api/login')
@@ -23,6 +24,11 @@ router.post('/', requireNoAuth, async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message })
   }
+})
+
+router.get('/fail', async (req, res) => {
+  console.log('Failed Strategy');
+  res.send({ error: 'Failed' });
 })
 
 module.exports = router

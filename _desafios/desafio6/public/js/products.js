@@ -133,7 +133,7 @@ fetch(SESSION_URL)
   .then(res => res.json())
   .then(data => {
     Swal.fire({
-      title: `Bienvenido ${data.user.first_name} ${data.user.last_name}`,
+      title: `Te damos la bienvenida ${data.user.first_name} ${data.user.last_name}`,
     })
   })
   .catch(error => console.log(error))

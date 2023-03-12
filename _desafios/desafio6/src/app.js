@@ -17,6 +17,9 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 // dotenv
 require('dotenv').config()
+// passport
+const passport = require('passport');
+const initializePassport = require('./config//passport.config.js')
 
 // enviroment variables
 const DB_USER = process.env.DB_USER;
@@ -33,6 +36,7 @@ const loginRouter = require('./routes/login.routes.js')
 const signupRouter = require('./routes/signup.routes.js')
 const profileRouter = require('./routes/profile.routes.js')
 const sessionsRouter = require('./routes/sessions.routes.js')
+const forgotRouter = require('./routes/forgot.routes.js')
 // products
 const { gestionProd } = require('./dao/fileSystem/ProductManager')
 const { messageRoute } = require('./routes/message.routes')
@@ -82,6 +86,10 @@ app.use(session({
     ttl: 420,
   })
 }))
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // routes
 app.use('/api/products', productsRouter)
@@ -92,6 +100,7 @@ app.use('/login', loginRouter)
 app.use('/signup', signupRouter)
 app.use('/profile', profileRouter)
 app.use('/sessions', sessionsRouter)
+app.use('/forgot', forgotRouter)
 
 // socketMessage = propaga los msj tanto localmente como desde mongoDB
 app.post('/chat', (req, res) => {
