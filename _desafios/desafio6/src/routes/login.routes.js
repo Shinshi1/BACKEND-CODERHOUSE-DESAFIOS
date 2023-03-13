@@ -9,7 +9,7 @@ router.get('/', requireNoAuth, (req, res) => {
 })
 
 
-router.post('/', passport.authenticate('login', { failureRedirect: '/login/faillogin' }), async (req, res) => {
+router.post('/', requireNoAuth, passport.authenticate('login', { failureRedirect: '/login/faillogin' }), async (req, res) => {
   if (!req.user) return res.status(400).send({ status: 'error', error: 'Incomplete values' })
   try {
     req.session.user = {
