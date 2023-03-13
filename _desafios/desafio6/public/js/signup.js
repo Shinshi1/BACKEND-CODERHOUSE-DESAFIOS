@@ -32,7 +32,7 @@ signupEl.addEventListener('click', (e) => {
           })
           setTimeout(() => {
             window.location.href = '/login'
-          }, 5000)
+          }, 3000)
         } else {
           alert('usuario no encontrado')
         }

@@ -16,7 +16,7 @@ elementExist('login') && document.getElementById('login').addEventListener('clic
     .then(res => res.json())
     .then(data => {
       console.log(data)
-      if (data.message === 'success') {
+      if (data.status === 'success') {
         (window.location.href = '/products')
       } else {
         alert('usuario no encontrado')
