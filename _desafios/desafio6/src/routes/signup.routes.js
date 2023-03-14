@@ -8,7 +8,7 @@ router.get('/', requireNoAuth, (req, res) => {
   res.render('signup', { title: 'Signup', stylesheet: 'signup' })
 })
 
-router.post('/', requireNoAuth, passport.authenticate('signup', { failureRedirect: '/login/fail' }), async (req, res) => {
+router.post('/', requireNoAuth, passport.authenticate('signup'), async (req, res) => {
   try {
     const user = req.user;
     res.status(201).json({ message: 'success', data: user })

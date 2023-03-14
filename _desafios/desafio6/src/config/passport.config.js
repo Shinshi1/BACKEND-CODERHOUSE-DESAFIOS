@@ -31,7 +31,7 @@ const initializePassport = () => {
 
   console.log('Passport: Running strategy...');
   passport.use('login', new localStrategy(
-    { passReqToCallback: true, usernameField: 'email' }, async (username, password, done) => {
+    { passReqToCallback: true }, async (req, username, password, done) => {
       console.log('Passport: Initializing strategy...');
       try {
         const user = await userModel.findOne({ email: username })
