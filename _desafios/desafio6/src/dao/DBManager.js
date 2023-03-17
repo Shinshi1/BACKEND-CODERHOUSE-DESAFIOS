@@ -19,7 +19,6 @@ class CartManager {
 			await newCart.save();
 			return newCart
 		} catch (error) {
-			console.log('hola')
 			throw new Error(error)
 		}
 	}

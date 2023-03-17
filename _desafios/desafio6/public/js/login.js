@@ -1,6 +1,7 @@
-const elementExist = (id) => document.getElementById(id) !== null;
+const loginEl = document.getElementById('login')
+const githubLoginEl = document.getElementById('githubLogin')
 
-elementExist('login') && document.getElementById('login').addEventListener('click', (e) => {
+loginEl.addEventListener('click', (e) => {
   const username = document.getElementById('username').value
   const password = document.getElementById('password').value
   fetch('/login', {
@@ -15,7 +16,6 @@ elementExist('login') && document.getElementById('login').addEventListener('clic
   })
     .then(res => res.json())
     .then(data => {
-      console.log(data)
       if (data.status === 'success') {
         (window.location.href = '/products')
       } else {

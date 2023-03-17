@@ -37,7 +37,6 @@ const sockets = (socketServer) => {
         });
         // add-messages, emit old-messages all users, create message at DB
         socket.on('message', (data) => {
-            console.log('recibe data?', data)
             messages.push(data);
             socketServer.emit('messageLogs', messages)
             messageModel.create(data)

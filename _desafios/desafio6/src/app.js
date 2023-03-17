@@ -28,6 +28,7 @@ const DB_NAME = process.env.DB_NAME;
 const PORT = process.env.PORT || 8080;
 const STRING_CONNECTION = `mongodb+srv://${DB_USER}:${DB_PASS}@codercluster.p8sktwl.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
+
 // imports routes
 const { cartsRouter } = require('./routes/carts.routes.js')
 const { productsRouter } = require('./routes/products.routes.js')
@@ -75,6 +76,7 @@ app.set('views', __dirname + '/views')
 // static archives
 app.use(express.static('public'))
 // app.use('/api', express.static('public'))
+
 // connect-mongo
 app.use(session({
   secret: 'secreto',//a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
@@ -162,5 +164,5 @@ const isValidStartData = () => {
 isValidStartData && enviroment()
 
 module.exports = {
-  messages
+  messages,
 }
