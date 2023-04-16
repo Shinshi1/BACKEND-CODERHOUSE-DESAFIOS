@@ -4,7 +4,7 @@ const { cartModel } = require('./models/carts.model.js')
 
 
 class CartManager {
-	async read() {
+	async getAll() {
 		try {
 			const carts = await cartModel.find();
 			return carts
@@ -13,13 +13,12 @@ class CartManager {
 		}
 	}
 
-	async create() {
+	async save() {
 		try {
 			const newCart = new cartModel()
 			await newCart.save();
 			return newCart
 		} catch (error) {
-			console.log('hola')
 			throw new Error(error)
 		}
 	}
@@ -33,7 +32,7 @@ class CartManager {
 		}
 	}
 
-	async update(cartId, product) {
+	async addSingleProductToCart(cartId, product) {
 		const myProduct = {
 			product: product._id,
 			quantity: 1,
@@ -82,7 +81,7 @@ class CartManager {
 		}
 	}
 
-	async findByID(cartId) {
+	async findById(cartId) {
 		try {
 			const cart = await cartModel.findById(cartId).populate('products.product')
 			// console.log('cart', JSON.stringify(cart, null, '\t') )
@@ -167,8 +166,8 @@ class ProductManager {
 }
 
 module.exports = {
-	CartManager,
-	ProductManager
+	MongoCartDao: CartManager ,
+	MongoProductDao: ProductManager
 }
 
 // const deleteInterest = (req, res) => {

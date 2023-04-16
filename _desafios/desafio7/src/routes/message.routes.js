@@ -1,23 +1,11 @@
 const { Router } = require("express");
-const { messageModel } = require("../dao/models/messages.model");
+const { getAllMessages, getEmptyMessages } = require("../controllers/message.controllers.js");
 
 const messageRoute = Router();
 
-messageRoute.get('/', async (req, res) => {
-    try {
-        let users = await messageModel.find()
-        console.log(users)
-        res.status(200).json(users)
+messageRoute.get('/', getAllMessages)
 
-    } catch (err) {
-        res.status(500).json({ error: err })
-    }
-})
-
-messageRoute.get('/', (req, res) => {
-    let messages = [];
-    res.json(messages);
-});
+messageRoute.get('/', getEmptyMessages);
 
 module.exports = {
     messageRoute

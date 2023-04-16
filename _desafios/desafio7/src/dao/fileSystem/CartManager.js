@@ -101,8 +101,6 @@ class CartManager {
     }
 }
 
-const gestionCart = new CartManager()
-
 module.exports = {
-    gestionCart
+    MemoryCartDao: CartManager ,
 }

@@ -1,5 +1,5 @@
 const { gestionProd } = require('./dao/fileSystem/ProductManager')
-const { messageModel } = require('./dao/models/messages.model')
+const { messageModel } = require('./dao/mongo/models/messages.model.js')
 // new-messages
 const messages = []
 
@@ -37,7 +37,6 @@ const sockets = (socketServer) => {
         });
         // add-messages, emit old-messages all users, create message at DB
         socket.on('message', (data) => {
-            console.log('recibe data?', data)
             messages.push(data);
             socketServer.emit('messageLogs', messages)
             messageModel.create(data)

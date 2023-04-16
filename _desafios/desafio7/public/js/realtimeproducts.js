@@ -1,5 +1,4 @@
 const productSocket = io()
-console.log('been here')
 
 // DOM connection
 // form 
@@ -38,7 +37,6 @@ const dataForm = () => {
         category: category,
         thumbnail: [thumbnail],
     }
-    console.log('from dataForm() prodcut is... ', product)
     return product
 }
 

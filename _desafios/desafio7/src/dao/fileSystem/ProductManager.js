@@ -108,11 +108,7 @@ class ProductManager {
     }
 }
 
-
-
-const gestionProd = new ProductManager()
-
 // exports
 module.exports = {
-    gestionProd
+    MemoryProductDao: ProductManager
 }

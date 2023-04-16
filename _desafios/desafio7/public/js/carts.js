@@ -5,13 +5,10 @@ const productContainer = document.querySelector('#productContainer');
 fetch(`${API_URL}`)
   .then(res => res.json())
   .then(data => {
-    console.log('fetch data', data)
-    console.log('products', data?.response?.products)
     productContainer.innerHTML = '';
 
     let products = ''
     data.response.products.forEach(({product, quantity}) => {
-      console.log(product)
       products += `
 <div class="card-item" data-code="${product.code}">
   <div class="card-img">
