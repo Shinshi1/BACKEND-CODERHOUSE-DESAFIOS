@@ -24,7 +24,7 @@ const resetPasswordController = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'error', data: 'User not exist' })
     } else {
-      const user = await USERSDAO.updatePasswordEmail(email, newPassword)
+      const user = await USERSDAO.updatePassword(email, newPassword)
       if (user) {
         return res.status(200).json({ message: 'success', data: 'Password Updated' })
       }

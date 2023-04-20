@@ -13,7 +13,7 @@ cartsRouter.get('/', CartController.getCarts);
 cartsRouter.post('/', CartController.saveCart);
 
 // eliminar carrito
-cartsRouter.delete('deleteCart/:id', CartController.deleteCart);
+cartsRouter.delete('/deleteCart/:id', CartController.deleteCart);
 
 // agregar 1 producto al carrito / quantity + 1 de producto
 cartsRouter.put('/:cid', CartController.addOneProductToCart);

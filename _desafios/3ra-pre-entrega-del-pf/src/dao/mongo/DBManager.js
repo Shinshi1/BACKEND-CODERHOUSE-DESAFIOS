@@ -58,7 +58,7 @@ class CartManager {
 
 	async deleteProduct(cartId, productId) {
 		try {
-			const newCart = await cartModel.updateOne({ _id: cartId }, { $pull: { products: { _id: productId } } })
+			const newCart = await cartModel.updateOne({ _id: cartId }, { $pull: { products: { product: productId } } })
 			return newCart
 		} catch (error) {
 			throw new Error(error)
@@ -67,7 +67,7 @@ class CartManager {
 
 	async updateProduct(cartId, productId, quantity) {
 		try {
-			await cartModel.updateOne({ id: cartId, 'products.product': productId }, { $inc: { 'products.$.quantity': quantity } })
+			await cartModel.updateOne({ _id: cartId, 'products.product': productId }, { $inc: { 'products.$.quantity': quantity } })
 		} catch (error) {
 			throw new Error(error)
 		}
@@ -75,7 +75,7 @@ class CartManager {
 
 	async deleteAllProducts(cartId) {
 		try {
-			await cartModel.updateOne({ id: cartId }, { $set: { products: [] } })
+			await cartModel.updateOne({ _id: cartId }, { $set: { products: [] } })
 		} catch (error) {
 			throw new Error(error)
 		}

@@ -21,15 +21,9 @@ class MongoUserDao {
     return await userModel.findOne({ email: email }, { email: 1, first_name: 1, last_name: 1, password: 1 });
   };
 
-  async updatePasswordEmail(email, newPassword) {
-    return await userModel.findOneAndUpdate({ email: email }, { password: newPassword });
-  };
-
   async getAllUsers() {
     return await userModel.find({});
   };
 }
 
-const mongoUserDao = new MongoUserDao();
-
-module.exports = mongoUserDao;
+module.exports = MongoUserDao;
