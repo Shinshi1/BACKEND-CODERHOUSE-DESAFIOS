@@ -1,12 +1,10 @@
-const USERSDAO = require('../dao/mongo/users.dao.js')
-const UserDTO = require('../dao/DTOs/user.dto.js')
+const { usersService } = require('../repositories/index.js')
 
 const getProfileInfo = async (req, res) => {
   const userId = req.session.user?._id;
   try {
     if (userId) {
-      const user = await USERSDAO.findById(userId)
-      const userDTO = new UserDTO(user)
+      const userDTO = await usersService.getUserByIdDTO(userId)
       res.render('profile', { title: 'Profile', stylesheet: 'profile', user: userDTO })
     } else {
       res.send('Sesión Expirada, porfavor vuelva a Iniciar Sesión')
@@ -33,6 +31,6 @@ const userLogout = async (req, res) => {
 }
 
 module.exports = {
-getProfileInfo,
-userLogout
+  getProfileInfo,
+  userLogout
 }

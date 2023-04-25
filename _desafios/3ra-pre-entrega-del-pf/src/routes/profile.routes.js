@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const {getProfileInfo, userLogout} = require('../controllers/profile.controllers.js')
-const { requireAuth } = require('../middlewares.js');
+const { requireAuth } = require('../middlewares/auth.middleware.js');
 
 const router = Router();
 

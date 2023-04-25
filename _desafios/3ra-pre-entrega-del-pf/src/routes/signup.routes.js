@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const passport = require('passport');
-const { requireNoAuth } = require('../middlewares.js');
+const { requireNoAuth } = require('../middlewares/auth.middleware.js');
 const { showSignupForm, processSignup, showFailedSignup } = require('../controllers/signup.controllers.js');
 
 const router = Router();

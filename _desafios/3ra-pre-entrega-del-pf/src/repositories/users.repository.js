@@ -16,7 +16,7 @@ class UserRepository {
   };
 
   updateUserPassword = async (email, newPassword) => {
-    let result  = await this.dao.updateUserPassword(email, newPassword)
+    let result = await this.dao.updatePassword(email, newPassword)
     return result;
   };
 
@@ -33,6 +33,18 @@ class UserRepository {
   getAllUsers = async () => {
     let result = await this.dao.getAllUsers();
     return result
+  }
+
+  getUserByIdDTO = async (userId) => {
+    let result = await this.dao.findById(userId);
+    return new UserDTO(result);
+  }
+
+  getUserByEmailDTOSubset = async (email, ...arraySubset) => {
+    let result = await this.dao.findByEmail(email);
+    const userDTO = UserDTO.createSubset(result, ...arraySubset);
+    console.log(userDTO)
+    return userDTO
   }
 }
 

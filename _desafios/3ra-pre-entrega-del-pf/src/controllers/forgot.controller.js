@@ -1,4 +1,4 @@
-const USERSDAO = require('../dao/mongo/users.dao.js')
+const { usersService } = require('../repositories/index.js')
 const { isValidPassword, createHash } = require('../utils.js');
 
 
@@ -19,12 +19,15 @@ const resetPasswordController = async (req, res) => {
 
 
   try {
-    const user = await USERSDAO.findByEmailForPasswordReset(email)
+    const user = await usersService.resetPassword(email)
 
     if (!user) {
+      console.log('hola')
       return res.status(404).json({ message: 'error', data: 'User not exist' })
     } else {
-      const user = await USERSDAO.updatePassword(email, newPassword)
+      console.log('hola2')
+      const user = await usersService.updateUserPassword(email, newPassword)
+      console.log(user)
       if (user) {
         return res.status(200).json({ message: 'success', data: 'Password Updated' })
       }

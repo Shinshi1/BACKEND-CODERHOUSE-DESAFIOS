@@ -1,6 +1,7 @@
 // import models
 const { productModel } = require('./models/products.model.js')
 const { cartModel } = require('./models/carts.model.js')
+const { userModel} = require('./models/users.model.js')
 
 
 class CartManager {
@@ -90,6 +91,13 @@ class CartManager {
 			throw new Error(error)
 		}
 	}
+
+	async purchase(cartId) {
+		const cart = await cartModel.findById(cartId);
+		
+
+		
+	}
 }
 
 
@@ -166,7 +174,7 @@ class ProductManager {
 }
 
 module.exports = {
-	MongoCartDao: CartManager ,
+	MongoCartDao: CartManager,
 	MongoProductDao: ProductManager
 }
 

@@ -2,8 +2,11 @@
 const express = require('express')
 const cartsRouter = express.Router()
 
+// import middleware
+const { isUser } = require('../middlewares/auth.middleware.js');
+
 // import controller
-const CartController = require('../controllers/carts.controllers.js')
+const CartController = require('../controllers/carts.controllers.js');
 
 // Methods
 // obtener carritos
@@ -16,7 +19,7 @@ cartsRouter.post('/', CartController.saveCart);
 cartsRouter.delete('/deleteCart/:id', CartController.deleteCart);
 
 // agregar 1 producto al carrito / quantity + 1 de producto
-cartsRouter.put('/:cid', CartController.addOneProductToCart);
+cartsRouter.put('/:cid', isUser, CartController.addOneProductToCart);
 
 // 2DA PRE-ENTREGA PF ↓
 // eliminar del carrito el producto seleccionado
@@ -30,6 +33,9 @@ cartsRouter.delete('/:cid', CartController.deleteAllProductsFromCart);
 
 // obtener 1 carrito por id
 cartsRouter.get('/:cid', CartController.getCartById);
+
+// finalizar compra
+cartsRouter.get('/:cid/purchase', CartController.finalizePurchase);
 
 
 // exports

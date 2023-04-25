@@ -42,6 +42,11 @@ class CartRepository {
     let result = await this.dao.findById(cartId);
     return result;
   }
+
+  finishPurchase = async (cartId) => {
+    let result = await this.dao.purchase(cartId);
+    return result;
+  }
 }
 
 module.exports = CartRepository

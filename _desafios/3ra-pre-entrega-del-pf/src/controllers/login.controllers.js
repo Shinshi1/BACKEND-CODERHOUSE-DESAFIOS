@@ -1,4 +1,3 @@
-
 const showLoginForm = async (req, res) => {
   res.render('login', { title: 'Login', stylesheet: 'login' })
 }
