@@ -1,0 +1,88 @@
+<h1>Carrito</h1>
+
+<h2>Lista de Productos</h2>
+<div id="productContainer" class="cards-container">
+
+</div>
+
+{{!--
+<script src="/socket.io/socket.io.js"></script> --}}
+<script src="/js/carts.js"></script>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: blanchedalmond;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    h2 {
+        text-align: center;
+        font-weight: 600;
+    }
+
+    /* PRODUCTS */
+
+    .cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 1rem;
+    }
+
+    .card-item {
+        text-align: center;
+        min-height: 397px;
+        height: 100%;
+        width: 306px;
+        background-color: aqua;
+        border-radius: .3rem;
+        overflow: hidden;
+    }
+
+    .card-img {
+        height: 250px;
+        width: 306px;
+    }
+
+    .card-img img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .card-details {
+        text-align: center;
+    }
+
+    .card-details p {
+        font-size: .8rem;
+    }
+
+    .card-details button {
+        background-color: #222;
+        color: #fff;
+        border: solid 1px #444;
+        padding: .3rem;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .card-details button:active {
+        background-color: #444;
+        border: solid 1px #222;
+        scale: .95;
+    }
+</style>

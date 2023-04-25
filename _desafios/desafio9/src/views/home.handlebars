@@ -1,0 +1,15 @@
+<h1>Lista de productos</h1>
+{{#each products}}
+<ul>
+    <li>name: {{title}}</li>
+    <li>description: {{description}}</li>
+    <li>code: {{code}}</li>
+    <li>price: {{price}}</li>
+    <li>status: {{status}}</li>
+    <li>stock: {{stock}}</li>
+    <li>category: {{category}}</li>
+    {{!-- <li>{{this.thumbnail}}</li> --}}
+</ul>
+{{/each}}
+
+<script src="/js/home.js"></script>
