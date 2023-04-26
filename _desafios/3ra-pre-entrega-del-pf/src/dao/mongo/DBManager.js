@@ -1,8 +1,6 @@
 // import models
 const { productModel } = require('./models/products.model.js')
 const { cartModel } = require('./models/carts.model.js')
-const { userModel} = require('./models/users.model.js')
-
 
 class CartManager {
 	async getAll() {
@@ -100,7 +98,6 @@ class CartManager {
 	}
 }
 
-
 class ProductManager {
 	async read(page, limit, category, status, sort) {
 		let options = {
@@ -169,7 +166,13 @@ class ProductManager {
 		}
 	}
 
-
+	async findProductById (productId) {
+		try {
+			return await productModel.findById(productId)
+		} catch (error) {
+			throw new Error(error)
+		}
+	}
 
 }
 
@@ -177,17 +180,3 @@ module.exports = {
 	MongoCartDao: CartManager,
 	MongoProductDao: ProductManager
 }
-
-// const deleteInterest = (req, res) => {
-// 	const userId = req.params.userId;
-// 	const interestId = req.params.interestId;
-
-// 	User.updateOne({ _id: userId }, { $pull: { interests: { _id: interestId } } })
-// 		.then(() => {
-// 			res.status(200).send(`Interest ${interestId} deleted from user ${userId}`);
-// 		})
-// 		.catch((error) => {
-// 			console.error(error);
-// 			res.status(500).send(error);
-// 		});
-// };

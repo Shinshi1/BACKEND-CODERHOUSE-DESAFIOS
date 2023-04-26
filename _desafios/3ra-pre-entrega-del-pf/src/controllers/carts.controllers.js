@@ -1,6 +1,4 @@
-const { cartsService, usersService } = require('../repositories/index.js');
-const { productModel } = require('../dao/mongo/models/products.model.js')
-const ticketModel = require('../dao/mongo/models/ticket.model.js');
+const { cartsService, productsService, ticketService } = require('../repositories/index.js');
 
 const getCarts = async (req, res) => {
   try {
@@ -95,56 +93,34 @@ const getCartById = async (req, res) => {
 
 const finalizePurchase = async (req, res) => {
   const { cid } = req.params;
-  const userId = req.user.id;
 
   try {
-    const user = await usersService.getUserById(userId);
-    // const cartId = user.cart
     const cart = await cartsService.findCart(cid)
 
     const unavalibleProducts = [];
-
-    // const productsToUpdateStock = [];
-    // const productsNotToUpdateStock = [];
-
-    console.log('carrito', cart)
+    let totalAmount = 0;
 
     for (const item of cart.products) {
       const product = item.product;
       const quantity = item.quantity;
-      const amount = product.price * quantity
-      // console.log('nombre', product.title)
-      // console.log('amount', amount)
 
-      const productInStock = await productModel.findById(product._id);
+      const productInStock = await productsService.findProductById(product._id);
 
-      // if (productInStock.stock >= quantity) {
-      // 	productInStock.stock -= quantity;
-      // 	await productInStock.save();
-      // } else {
-      // 	unavalibleProducts.push(product._id)
-      // }
+      if (productInStock.stock >= quantity) {
+        productInStock.stock -= quantity;
+        await productInStock.save();
 
+        totalAmount += product.price * quantity
+        cartsService.deleteProduct(cid, product._id)
+      } else {
+        unavalibleProducts.push(product._id)
+      }
     }
 
-    const amount = cart.products.product.price.reduce((acc, el) => acc + el, 0)
-    console.log(amount)
+    // ticket
+    await ticketService.createTicket(totalAmount, req.user.email)
 
-
-    // if (unavalibleProducts.length > 0) {
-    // 	res.status(400).json({ message: 'Algunos productos no se pudieron comprar', unavalibleProducts });
-    // } else {
-    // 	const ticket = {
-    //     	// amount: ,
-    //       // purchaser:
-    // 	}
-    // 	await ticket.save();
-    // 	await cart.findByIdAndUpdate(cartId);
-    // 	// res.json({ message: 'Compra finalizada' });
-    // }
-    const response = cartsService.findCart(cid)
-
-    res.status(200).send({ message: 'Successful purchase', response: response });
+    res.status(200).send({ message: 'Successful purchase', unavalibleProducts: unavalibleProducts });
   } catch (error) {
     res.status(500).send(error.message)
   }

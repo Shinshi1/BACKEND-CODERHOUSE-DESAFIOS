@@ -22,6 +22,11 @@ class ProductRepository {
     let result = await this.dao.update(productId, product);
     return result;
   };
+
+  findProductById = async (productId) => {
+    let result = await this.dao.findProductById(productId);
+    return result
+  }
 };
 
 module.exports = ProductRepository;
