@@ -20,6 +20,8 @@ require('dotenv').config()
 // passport
 const passport = require('passport');
 const initializePassport = require('./config//passport.config.js')
+// customError
+const errorHandler = require('./middlewares/errors/index.js')
 
 // enviroment variables
 const DB_USER = process.env.DB_USER;
@@ -104,6 +106,8 @@ app.use('/signup', signupRouter)
 app.use('/profile', profileRouter)
 app.use('/sessions', sessionsRouter)
 app.use('/forgot', forgotRouter)
+
+app.use(errorHandler)
 
 // socketMessage = propaga los msj tanto localmente como desde mongoDB
 app.post('/chat', (req, res) => {
