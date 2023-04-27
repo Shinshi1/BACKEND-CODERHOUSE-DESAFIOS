@@ -1,4 +1,7 @@
-const USERSDAO = require('../dao/mongo/users.dao.js')
+const { usersService } = require('../repositories/index.js');
+const CustomError = require('../services/errors/CustomError.js');
+const EErrors = require('../services/errors/enums.js');
+const { generateValidationErrorInfo } = require('../services/errors/info.js');
 const { isValidPassword, createHash } = require('../utils.js');
 
 
@@ -11,20 +14,39 @@ const resetPasswordController = async (req, res) => {
 
   let newPassword = createHash(password)
 
-  if (!email || !password || !repeatPassword) return res.status(400).send({ status: 'error', error: 'Incomplete values' })
+  if (!email || !password || !repeatPassword) {
+    CustomError.createError({
+      name: 'InvalidRequestError',
+      cause: '',
+      message: 'Incomplete Values',
+      code: EErrors.INVALID_TYPES_ERROR
+    })
+  }
 
   if (!isValidPassword(repeatPassword, newPassword)) {
     return res.status(400).json({ message: 'error', data: 'passwords do not match' })
+    // CustomError.createError({
+    //   name: 'InvalidRequestError',
+    //   cause: '',
+    //   message: 'Passwords do not match',
+    //   code: EErrors.PASSWORDS_DO_NOT_MATCH
+    // })
   }
 
 
   try {
-    const user = await USERSDAO.findByEmailForPasswordReset(email)
+    const user = await usersService.resetPassword(email)
 
     if (!user) {
       return res.status(404).json({ message: 'error', data: 'User not exist' })
+      // CustomError.createError({
+      //   name: 'NotFoundError',
+      //   code: EErrors.USER_NOT_EXIST,
+      //   message: 'User not exist',
+      // })
     } else {
-      const user = await USERSDAO.updatePasswordEmail(email, newPassword)
+      const user = await usersService.updateUserPassword(email, newPassword)
+      console.log(user)
       if (user) {
         return res.status(200).json({ message: 'success', data: 'Password Updated' })
       }

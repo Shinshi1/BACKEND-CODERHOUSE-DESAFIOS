@@ -2,7 +2,6 @@
 const { productModel } = require('./models/products.model.js')
 const { cartModel } = require('./models/carts.model.js')
 
-
 class CartManager {
 	async getAll() {
 		try {
@@ -58,7 +57,7 @@ class CartManager {
 
 	async deleteProduct(cartId, productId) {
 		try {
-			const newCart = await cartModel.updateOne({ _id: cartId }, { $pull: { products: { _id: productId } } })
+			const newCart = await cartModel.updateOne({ _id: cartId }, { $pull: { products: { product: productId } } })
 			return newCart
 		} catch (error) {
 			throw new Error(error)
@@ -67,7 +66,7 @@ class CartManager {
 
 	async updateProduct(cartId, productId, quantity) {
 		try {
-			await cartModel.updateOne({ id: cartId, 'products.product': productId }, { $inc: { 'products.$.quantity': quantity } })
+			await cartModel.updateOne({ _id: cartId, 'products.product': productId }, { $inc: { 'products.$.quantity': quantity } })
 		} catch (error) {
 			throw new Error(error)
 		}
@@ -75,7 +74,7 @@ class CartManager {
 
 	async deleteAllProducts(cartId) {
 		try {
-			await cartModel.updateOne({ id: cartId }, { $set: { products: [] } })
+			await cartModel.updateOne({ _id: cartId }, { $set: { products: [] } })
 		} catch (error) {
 			throw new Error(error)
 		}
@@ -90,8 +89,14 @@ class CartManager {
 			throw new Error(error)
 		}
 	}
-}
 
+	async purchase(cartId) {
+		const cart = await cartModel.findById(cartId);
+		
+
+		
+	}
+}
 
 class ProductManager {
 	async read(page, limit, category, status, sort) {
@@ -161,25 +166,17 @@ class ProductManager {
 		}
 	}
 
-
+	async findProductById (productId) {
+		try {
+			return await productModel.findById(productId)
+		} catch (error) {
+			throw new Error(error)
+		}
+	}
 
 }
 
 module.exports = {
-	MongoCartDao: CartManager ,
+	MongoCartDao: CartManager,
 	MongoProductDao: ProductManager
 }
-
-// const deleteInterest = (req, res) => {
-// 	const userId = req.params.userId;
-// 	const interestId = req.params.interestId;
-
-// 	User.updateOne({ _id: userId }, { $pull: { interests: { _id: interestId } } })
-// 		.then(() => {
-// 			res.status(200).send(`Interest ${interestId} deleted from user ${userId}`);
-// 		})
-// 		.catch((error) => {
-// 			console.error(error);
-// 			res.status(500).send(error);
-// 		});
-// };

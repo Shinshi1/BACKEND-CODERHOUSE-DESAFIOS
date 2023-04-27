@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const {forgotPageController, resetPasswordController} = require('../controllers/forgot.controller.js')
-const { requireNoAuth } = require('../middlewares.js');
+const { requireNoAuth } = require('../middlewares/auth.middleware.js');
 
 const router = Router();
 

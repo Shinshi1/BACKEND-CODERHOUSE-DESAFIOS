@@ -1,10 +1,13 @@
-const { PRODUCTSDAO } = require('../dao/index.js')
+const { productsService } = require('../repositories/index.js')
 
 const getProducts = async (req, res) => {
   const { limit, page, category, status, sort } = req.query;
   // const {category} = req.params;
   try {
-    let product = await PRODUCTSDAO.read(page, limit, category, status, sort)
+    let product = await productsService.getProducts(page, limit, category, status, sort);
+
+
+
     // console.log('products.routes.js', product)
     const productExist = () => {
       if (Boolean(product.docs)) return 'success'
@@ -45,7 +48,7 @@ const saveProduct = async (req, res) => {
     res.status(400).send({ error: 'Faltan datos' })
   }
   try {
-    response = await PRODUCTSDAO.create({
+    const response = await productsService.createProduct({
       title,
       description,
       code,
@@ -65,7 +68,7 @@ const deleteProduct = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const response = await PRODUCTSDAO.delete(id);
+    const response = await productsService.deleteProduct(id);
 
     if (Boolean(response) === true) {
       res.status(200).send({ message: 'Producto eliminado', response });
@@ -95,7 +98,7 @@ const updateProduct = async (req, res) => {
   }
 
   try {
-    const response = await PRODUCTSDAO.update(id, {
+    const response = await productsService.updateProduct(id, {
       title,
       description,
       code,

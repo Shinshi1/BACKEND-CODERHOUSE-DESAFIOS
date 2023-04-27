@@ -1,7 +1,7 @@
 const passport = require('passport')
 const local = require('passport-local')
 const GitHubStrategy = require('passport-github2')
-const USERSDAO = require('../dao/mongo/users.dao.js');
+const { usersService } = require('../repositories/index.js')
 const { createHash, isValidPassword } = require('../utils.js')
 
 const CLIENTID = process.env.CLIENTID;
@@ -16,7 +16,7 @@ const initializePassport = () => {
       const { first_name, last_name, email, age } = req.body;
 
       try {
-        let user = await USERSDAO.findByEmail(username)
+        let user = await usersService.getUserByEmail(username)
         if (user) {
           console.log('User alredy exists')
           return done(null, false, { message: 'User alredy exists' })
@@ -28,7 +28,7 @@ const initializePassport = () => {
           password: createHash(password),
           age,
         }
-        let result = await USERSDAO.createUser(newUser)
+        let result = await usersService.createUser(newUser)
         return done(null, result);
       } catch (error) {
         return done('Error al obtener usuario: ' + error)
@@ -38,7 +38,8 @@ const initializePassport = () => {
   passport.use('login', new localStrategy(
     { passReqToCallback: true }, async (req, username, password, done) => {
       try {
-        const user = await USERSDAO.findByEmail(username)
+        const user = await usersService.getUserByEmail(username)
+
         if (!user) {
           console.log("User doesn't exist")
           return done(null, false, { message: "User doesn't exist" })
@@ -58,7 +59,7 @@ const initializePassport = () => {
     try {
       console.log(profile);
       // let user = await userModel.findOne({ email: profile._json.email })
-      let user = await USERSDAO.findByEmail(profile._json.email)
+      let user = await usersService.getUserByEmail(profile._json.email)
       if (!user) {
         let newUser = {
           first_name: profile._json.name,
@@ -67,7 +68,7 @@ const initializePassport = () => {
           email: profile._json.email,
           password: '',
         }
-        let result = await USERSDAO.createUser(newUser);
+        let result = await usersService.createUser(newUser);
         console.log(result)
         done(null, result)
       } else {
@@ -79,12 +80,11 @@ const initializePassport = () => {
   }))
 
   passport.serializeUser((user, done) => {
-    console.log('passport.serializeUser', user)
     done(null, user.id) // quizas user._id
   });
 
   passport.deserializeUser(async (id, done) => {
-    let user = await USERSDAO.findById(id)
+    let user = await usersService.getUserById(id)
     done(null, user)
   })
 }

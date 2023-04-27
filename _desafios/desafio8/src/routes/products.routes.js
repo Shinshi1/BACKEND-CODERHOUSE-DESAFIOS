@@ -2,6 +2,9 @@
 const express = require('express')
 const productsRouter = express.Router()
 
+// import middleware
+const { isAdmin } = require('../middlewares/auth.middleware')
+
 // import Controller
 const { getProducts, saveProduct, deleteProduct, updateProduct } = require('../controllers/products.controllers.js');
 
@@ -40,11 +43,11 @@ productsRouter.get('/', getProducts);
 //     }
 // });
 
-productsRouter.post('/', saveProduct)
+productsRouter.post('/', isAdmin, saveProduct)
 
-productsRouter.delete('/:id', deleteProduct)
+productsRouter.delete('/:id', isAdmin, deleteProduct)
 
-productsRouter.put('/:id', updateProduct)
+productsRouter.put('/:id', isAdmin, updateProduct)
 
 // exports
 module.exports = {

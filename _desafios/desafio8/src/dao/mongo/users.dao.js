@@ -1,17 +1,11 @@
 const userModel = require('./models/users.model.js');
 
 class MongoUserDao {
-  async findById(userId, showDataProfile) {
-    if (showDataProfile) {
-      return await userModel.findById(userId).select('first_name last_name age').lean();
-    };
+  async findById(userId) {
     return await userModel.findById(userId);
   };
 
-  async findByEmail(email, showDataProfile) {
-    if (showDataProfile) {
-      return await userModel.findOne({ email }).select('-_id first_name last_name').lean(); //-`_id` - para no incluir el id del usuario
-    };
+  async findByEmail(email) {
     return await userModel.findOne({ email });
   };
 
@@ -27,15 +21,9 @@ class MongoUserDao {
     return await userModel.findOne({ email: email }, { email: 1, first_name: 1, last_name: 1, password: 1 });
   };
 
-  async updatePasswordEmail(email, newPassword) {
-    return await userModel.findOneAndUpdate({ email: email }, { password: newPassword });
-  };
-
   async getAllUsers() {
     return await userModel.find({});
   };
 }
 
-const mongoUserDao = new MongoUserDao();
-
-module.exports = mongoUserDao;
+module.exports = MongoUserDao;
