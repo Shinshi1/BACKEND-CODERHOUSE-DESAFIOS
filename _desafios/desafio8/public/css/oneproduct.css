@@ -1,0 +1,130 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #F5F5F5;
+  font-family: 'Poppins', sans-serif;
+}
+
+nav {
+  height: 4rem;
+  width: 100%;
+}
+
+nav div {
+  height: 3rem;
+  width: 100%;
+  background-color: #212121;
+  position: fixed;
+  z-index: 1000000;
+}
+
+nav ul {
+  line-height: 3rem;
+  display: flex;
+  justify-content: space-evenly;
+  list-style: none;
+}
+
+nav li a {
+  color: #fff;
+}
+
+
+h3 {
+  text-align: center;
+  font-size: 2rem;
+  color: #212121;
+}
+
+main {
+  height: 90vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#product-container {
+  max-height: 600px;
+  max-width: 1000px;
+  width: 70%;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #ccc;
+  display: flex;
+  justify-content: center;
+  background-color: #FDB813;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.product-img {
+  height: 500px;
+  width: 400px;
+  background-color: #fff;
+}
+
+.product-img img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  max-height: 400px;
+  height: auto;
+  width: 400px;
+  background-color: #fff;
+}
+
+.product-details p {
+  padding: 0 1rem;
+  font-size: 0.9rem;
+}
+
+.product-details .quantity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quantity .input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.quantity .input-group button {
+  width: 2rem;
+  height: 2rem;
+}
+
+.product-details .quantity .input-group input {
+  text-align: center;
+}
+
+.product-details .quantity .input-group input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  height: 1.5rem;
+  width: auto;
+}
+
+.product-details button {
+  width: 250px;
+  height: 50px;
+  border: none;
+  background-color: #02386e;
+  color: #fff;
+  font-size: 1rem;
+  font-family: 'poppins';
+  cursor: pointer;
+}
