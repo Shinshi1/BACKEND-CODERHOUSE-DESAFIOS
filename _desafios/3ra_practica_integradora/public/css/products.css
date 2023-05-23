@@ -7,8 +7,32 @@
 }
 
 body {
-  background-color: blanchedalmond;
+  background-color: #F5F5F5;
   font-family: 'Poppins', sans-serif;
+}
+
+nav {
+  height: 4rem;
+  width: 100%;
+}
+
+nav div {
+  height: 3rem;
+  width: 100%;
+  background-color: #212121;
+  position: fixed;
+  z-index: 1000000;
+}
+
+nav ul {
+  line-height: 3rem;
+  display: flex;
+  justify-content: space-evenly;
+  list-style: none;
+}
+
+nav li a {
+  color: #fff;
 }
 
 h1 {
@@ -55,7 +79,7 @@ h2 {
   min-height: 397px;
   height: 100%;
   width: 306px;
-  background-color: aqua;
+  background-color: #FDB813;
   border-radius: .3rem;
   overflow: hidden;
 }
@@ -79,7 +103,9 @@ h2 {
   font-size: .8rem;
 }
 
+
 .card-details button {
+  margin-top: .5rem;
   background-color: #222;
   color: #fff;
   border: solid 1px #444;
@@ -108,7 +134,7 @@ h2 {
   border: none;
   border-radius: .3rem;
   padding: .1rem;
-  background-color: aquamarine;
+  background-color: #0066CC;
   cursor: pointer;
 }
 

@@ -1,5 +1,5 @@
 const CustomError = require('../services/errors/CustomError.js')
-const EErrors = require('../services/errors/enums.js')
+const EErrors = require('../services/errors/enums.js').default
 
 const showLoginForm = async (req, res) => {
   res.render('login', { title: 'Login', stylesheet: 'login' })

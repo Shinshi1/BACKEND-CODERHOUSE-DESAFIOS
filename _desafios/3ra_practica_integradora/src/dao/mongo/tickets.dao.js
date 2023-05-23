@@ -9,7 +9,12 @@ class MongoTicketDao {
     await ticket.save();
   };
 
- 
+  async getTicketsUser(purchaserMail) {
+    const tickets = await ticketModel.find({ purchaser: purchaserMail });
+    return tickets;
+  }
+
+
 };
 
 module.exports = MongoTicketDao;

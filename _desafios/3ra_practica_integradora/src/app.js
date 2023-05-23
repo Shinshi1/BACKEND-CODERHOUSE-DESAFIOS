@@ -80,6 +80,7 @@ app.set('view engine', 'handlebars')
 app.set('views', __dirname + '/views')
 // static archives
 app.use(express.static('public'))
+app.use('/product', express.static('public'))
 // app.use('/api', express.static('public'))
 
 // connect-mongo
@@ -127,9 +128,17 @@ app.get('/', async (req, res) => {
 
 */
 
-app.get('/products', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     res.status(200).render('products', { stylesheet: 'products' })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+});
+
+app.get('/product/:id', async (req, res) => {
+  try {
+    res.status(200).render('oneproduct', { stylesheet: 'oneproduct' })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

@@ -83,7 +83,6 @@ class CartManager {
 	async findById(cartId) {
 		try {
 			const cart = await cartModel.findById(cartId).populate('products.product')
-			// console.log('cart', JSON.stringify(cart, null, '\t') )
 			return cart
 		} catch (error) {
 			throw new Error(error)
@@ -118,7 +117,6 @@ class ProductManager {
 			if (sort) {
 				if (sort === 'asc') {
 					options.sort = { price: 1 }
-					console.log(options)
 
 					const products = await productModel.paginate({}, options)
 					return products

@@ -5,7 +5,7 @@ const getCurrentUser = async (req, res) => {
   const userEmail = req.session.user?.email;
   try {
     if (userEmail) {
-      const user = await usersService.getUserByEmailDTOSubset(userEmail, ['first_name', 'last_name']);
+      const user = await usersService.getUserByEmailDTOSubset(userEmail, ['first_name', 'last_name', 'cart']);
       console.log(user)
       res.json({ message: 'User found', user: user })
     } else {

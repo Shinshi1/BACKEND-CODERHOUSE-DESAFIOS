@@ -19,7 +19,7 @@ cartsRouter.post('/', CartController.saveCart);
 cartsRouter.delete('/deleteCart/:id', CartController.deleteCart);
 
 // agregar 1 producto al carrito / quantity + 1 de producto
-cartsRouter.put('/:cid', /* isUser, */CartController.addOneProductToCart);
+cartsRouter.put('/:cid', /*isUser,*/ CartController.addOneProductToCart);
 
 // 2DA PRE-ENTREGA PF ↓
 // eliminar del carrito el producto seleccionado

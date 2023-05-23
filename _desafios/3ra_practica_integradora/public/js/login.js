@@ -17,7 +17,7 @@ loginEl.addEventListener('click', (e) => {
     .then(res => res.json())
     .then(data => {
       if (data.status === 'success') {
-        (window.location.href = '/products')
+        (window.location.href = '/')
       } else {
         alert('usuario no encontrado')
       }
