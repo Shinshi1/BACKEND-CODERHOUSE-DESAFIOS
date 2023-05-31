@@ -43,6 +43,9 @@ const signupRouter = require('./routes/signup.routes.js')
 const profileRouter = require('./routes/profile.routes.js')
 const sessionsRouter = require('./routes/sessions.routes.js')
 const forgotRouter = require('./routes/forgot.routes.js')
+const administrationRouter = require('./routes/administration.routes.js')
+const usersRouter = require('./routes/users.routes.js')
+
 // products
 // const { gestionProd } = require('./dao/fileSystem/ProductManager')
 const { messageRoute } = require('./routes/message.routes')
@@ -81,11 +84,13 @@ app.set('views', __dirname + '/views')
 // static archives
 app.use(express.static('public'))
 app.use('/product', express.static('public'))
+app.use('/forgot', express.static('public'))
+app.use('/profile', express.static('public'))
 // app.use('/api', express.static('public'))
 
 // connect-mongo
 app.use(session({
-  secret: MONGOSECRET,//a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
+  secret: MONGOSECRET,
   resave: true,
   saveUninitialized: true,
   store: MongoStore.create({
@@ -102,6 +107,7 @@ app.use(passport.session());
 // routes
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
+app.use('/api/users', usersRouter)
 app.use('/chat', chatRouter)
 app.use('/messages', messageRoute)
 app.use('/login', loginRouter)
@@ -109,6 +115,7 @@ app.use('/signup', signupRouter)
 app.use('/profile', profileRouter)
 app.use('/sessions', sessionsRouter)
 app.use('/forgot', forgotRouter)
+app.use('/administration', administrationRouter)
 
 app.use(errorHandler)
 

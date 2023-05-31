@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { cartModel } = require('./carts.model.js')
+const { cartModel } = require('./carts.model.js');
 
 const userCollection = 'users';
 
@@ -15,19 +15,10 @@ const userSchema = new mongoose.Schema({
   cart: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'carts',
-    // validación de cart
-    /* 
-    validate: {
-      validator: function (value) {
-        return value !== undefined;
-      },
-      message: 'cart is required'
-    }
-    */
   },
   role: {
     type: String,
-    enum: ['user', 'admin'],
+    enum: ['user', 'admin', 'premium'],
     default: 'user'
   }
 });
@@ -42,20 +33,6 @@ userSchema.pre('save', async function (next) {
   } catch (error) {
     next(error);
   }})
-
-// userSchema.pre('create', async function (next) {
-//   if (!this.cart) {
-//     try {
-//       const newCart = await cartModel.create({});
-//       this.cart = newCart._id;
-//       next();
-//     } catch (error) {
-//       next(error);
-//     }
-//   } else {
-//     next();
-//   }
-// });
 
 const userModel = mongoose.model(userCollection, userSchema);
 

@@ -6,9 +6,6 @@ const getProducts = async (req, res) => {
   try {
     let product = await productsService.getProducts(page, limit, category, status, sort);
 
-
-
-    // console.log('products.routes.js', product)
     const productExist = () => {
       if (Boolean(product.docs)) return 'success'
       else return 'error'
@@ -42,9 +39,10 @@ const saveProduct = async (req, res) => {
     stock,
     category,
     status,
+    owner
   } = req.body
 
-  if (!title || !description || !code || !price || !thumbnail || !stock || !category) {
+  if (!title || !description || !code || !price || !thumbnail || !stock || !category || !owner) {
     res.status(400).send({ error: 'Faltan datos' })
   }
   try {
@@ -57,23 +55,33 @@ const saveProduct = async (req, res) => {
       stock,
       category,
       status,
+      owner
     })
     res.status(200).send({ message: 'Producto creado', response })
   } catch (error) {
-    res.status(500).send(error.message)
+    res.status(500).send({ error: error.message })
   }
 }
 
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
+  const userEmail = req.session.user?.email;
 
   try {
-    const response = await productsService.deleteProduct(id);
+    const product = await productsService.findProductById(id)
 
-    if (Boolean(response) === true) {
+    if (!product) {
+      return res.status(404).send({ error: 'Producto no encontrado' })
+    }
+    
+    if (req.session.user.role === 'admin') {
+      const response = await productsService.deleteProduct(id);
+      res.status(200).send({ message: 'Producto eliminado', response });
+    } else if (product.owner === userEmail) {
+      const response = await productsService.deleteProduct(id);
       res.status(200).send({ message: 'Producto eliminado', response });
     } else {
-      res.status(500).send({ message: 'Producto no encontrado', response });
+      res.status(403).send({ error: 'No tienes permisos para borrar este producto' })
     }
   } catch (error) {
     res.status(500).send(error.message);

@@ -66,7 +66,24 @@ class CartManager {
 
 	async updateProduct(cartId, productId, quantity) {
 		try {
-			await cartModel.updateOne({ _id: cartId, 'products.product': productId }, { $inc: { 'products.$.quantity': quantity } })
+			const result = await cartModel.updateOne({ _id: cartId, 'products.product': productId }, { $inc: { 'products.$.quantity': quantity } })
+
+			if (result.modifiedCount === 0) {
+				const addToSetResult = await cartModel.updateOne(
+					{ _id: cartId },
+					{
+						$addToSet: {
+							products: {
+								product: productId,
+								quantity: quantity
+							}
+						},
+					},
+				);
+				return addToSetResult
+			}
+
+			return result
 		} catch (error) {
 			throw new Error(error)
 		}
@@ -91,9 +108,9 @@ class CartManager {
 
 	async purchase(cartId) {
 		const cart = await cartModel.findById(cartId);
-		
 
-		
+
+
 	}
 }
 
@@ -164,7 +181,7 @@ class ProductManager {
 		}
 	}
 
-	async findProductById (productId) {
+	async findProductById(productId) {
 		try {
 			return await productModel.findById(productId)
 		} catch (error) {

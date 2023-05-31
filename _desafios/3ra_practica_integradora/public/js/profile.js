@@ -1,9 +1,34 @@
 const logoutEl = document.querySelector('#logout')
+const changeRoleButton = document.querySelector('#changeRole')
 const clearCartButton = document.querySelector('#clear-cart-button');
 const purchaseButton = document.querySelector('#buy-cart-button');
+const userRoleSpan = document.querySelector('#userRole')
+
+
 
 logoutEl.addEventListener('click', () => {
   window.location.pathname += '/logout'
+})
+
+changeRoleButton.addEventListener('click', () => {
+  const uid = changeRoleButton.getAttribute('data-id')
+  fetch(`/api/users/premium/${uid}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+      },
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.error) {
+      alert(data.error)
+    } else {
+      alert(data.message)
+      let newRole = data.message.split(' ')[4]
+      userRoleSpan.innerHTML = `role - ${newRole}`
+    }
+  })
+  .catch(err => console.error(err));
 })
 
 const getCookie = (cookieName) => {

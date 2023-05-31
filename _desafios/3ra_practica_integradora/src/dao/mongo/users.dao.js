@@ -24,6 +24,18 @@ class MongoUserDao {
   async getAllUsers() {
     return await userModel.find({});
   };
+
+  async updateUser(userId, updateFields) {
+    try {
+      const updatedUser = await userModel.findOneAndUpdate({ _id: userId }, { $set: updateFields }, { new: true }) // `{new:true}` devuelve el usuario actualizado en lugar del anterior
+
+      if (!updatedUser) throw new Error('Usuario no encontrado')
+
+      return updatedUser;
+    } catch (error) {
+      throw new Error('Error al actualizar el usuario')
+    }
+  }
 }
 
 module.exports = MongoUserDao;

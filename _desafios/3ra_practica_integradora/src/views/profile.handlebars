@@ -18,6 +18,8 @@
       <div class="user-container">
         <h2>{{user.first_name}} {{user.last_name}}</h2>
         <span>{{user.age}} años</span>
+        <span id="userRole">role - {{user.role}}</span>
+        <button id="changeRole" data-id="{{user._id}}">Cambiar role</button>
       </div>
       <div class="logout-container">
         <button id="logout">Logout</button>

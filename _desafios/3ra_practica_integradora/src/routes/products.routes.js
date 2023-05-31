@@ -3,7 +3,7 @@ const express = require('express')
 const productsRouter = express.Router()
 
 // import middleware
-const { isAdmin } = require('../middlewares/auth.middleware')
+const { isAdmin, isAdminOrPremium } = require('../middlewares/auth.middleware')
 
 // import Controller
 const { getProducts, saveProduct, deleteProduct, updateProduct, findProduct } = require('../controllers/products.controllers.js');
@@ -11,9 +11,9 @@ const { getProducts, saveProduct, deleteProduct, updateProduct, findProduct } = 
 // Methods
 productsRouter.get('/', getProducts);
 
-productsRouter.post('/', isAdmin, saveProduct)
+productsRouter.post('/', isAdminOrPremium, saveProduct)
 
-productsRouter.delete('/:id', isAdmin, deleteProduct)
+productsRouter.delete('/:id', isAdminOrPremium, deleteProduct)
 
 productsRouter.put('/:id', isAdmin, updateProduct)
 

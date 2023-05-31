@@ -45,6 +45,11 @@ class UserRepository {
     const userDTO = UserDTO.createSubset(result, ...arraySubset);
     return userDTO
   }
+
+  updateUser = async (userId, updateFields) => {
+    const updatedUser = await this.dao.updateUser(userId, updateFields)
+    return updatedUser;
+  }
 }
 
 module.exports = UserRepository

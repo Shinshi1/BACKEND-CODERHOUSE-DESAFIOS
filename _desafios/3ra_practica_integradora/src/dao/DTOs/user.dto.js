@@ -1,9 +1,12 @@
 class UserDTO {
-  constructor({ first_name, last_name, age, cart }) {
+  constructor({ first_name, last_name, age, cart, email, role, _id }) {
     this.first_name = first_name;
     this.last_name = last_name;
     this.age = age;
-    this.cart = cart
+    this.cart = cart;
+    this.email = email;
+    this.role = role;
+    this._id = _id;
   }
 
   static createSubset(user, properties) {

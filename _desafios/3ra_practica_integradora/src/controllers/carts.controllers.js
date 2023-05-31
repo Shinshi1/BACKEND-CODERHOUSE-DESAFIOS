@@ -1,4 +1,4 @@
-const { cartsService, productsService, ticketService } = require('../repositories/index.js');
+const { cartsService, productsService, ticketService, usersService } = require('../repositories/index.js');
 
 const getCarts = async (req, res) => {
   try {
@@ -36,7 +36,21 @@ const deleteCart = async (req, res) => {
 const addOneProductToCart = async (req, res) => {
   const { cid } = req.params;
   const product = req.body;
+  const user = req.session.user;
+  console.log('product', product);
+  console.log({ 'user': user })
+
   try {
+    const productFound = await productsService.findProductById(product._id)
+
+    if (!user || !productFound) {
+      return res.status(404).send({ error: 'Usuario o producto no encontrado' })
+    }
+    // console.log('tiene que dar true:', user.role === 'premium' && productFound.owner === user.email )
+    if (user.role === 'premium' && productFound.owner === user.email) {
+      return res.status(405).send({ error: 'No puedes agreagar tu propio producto al carrito' })
+    }
+
     const response = await cartsService.addSingleProductToCart(cid, product);
     res.status(200).send({ message: 'Carrito actualizado!', response })
   } catch (error) {
@@ -59,11 +73,25 @@ const deleteProductFromCart = async (req, res) => {
 const addProductsToCart = async (req, res) => {
   const { cid, pid } = req.params;
   const { quantity } = req.body;
+  const user = req.session.user;
 
   try {
-    await cartsService.updateProduct(cid, pid, quantity)
-    res.status(200).send({ message: `quantity of product ${pid} in cart ${cid} increased by ${quantity}` })
+    const productFound = await productsService.findProductById(pid)
 
+    if (!user || !productFound) {
+      return res.status(404).send({ error: 'Usuario o producto no encontrado' })
+    }
+
+    if (user.role === 'premium' && productFound.owner === user.email) {
+      return res.status(405).send({ error: 'No puedes agreagar tu propio producto al carrito' })
+    }
+
+    const response = await cartsService.updateProduct(cid, pid, quantity)
+    if (response.modifiedCount === 0) {
+      return res.status(404).send({ error: 'El producto no puso ser actualizdo ni agregado al carrito' })
+    }
+
+    res.status(200).send({ message: `quantity of product ${pid} in cart ${cid} increased by ${quantity}` })
   } catch (error) {
     res.status(500).send(error.message)
   }

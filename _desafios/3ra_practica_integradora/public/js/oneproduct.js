@@ -102,7 +102,11 @@ fetch(API_URL)
         })
           .then(response => response.json())
           .then(data => {
-            alert('Producto agregador carrito', data)
+            if (data.error) {
+              alert(data.error)
+            } else {
+              alert('Producto agregador carrito', data)
+            }
           })
           .catch(error => console.error(error));
       } else {
@@ -116,7 +120,11 @@ fetch(API_URL)
           .then(response => response.json())
           .then(data => {
             console.log(data)
-            alert(`${inputQuantity.value} Productos agregador carrito`)
+            if(data.error) {
+              alert(data.error)
+            } else {
+              alert(`${inputQuantity.value} Productos agregados carrito`)
+            }
           })
           .catch(error => console.error(error));
       }
