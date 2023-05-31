@@ -20,6 +20,10 @@ require('dotenv').config()
 // passport
 const passport = require('passport');
 const initializePassport = require('./config//passport.config.js')
+// customError
+const errorHandler = require('./middlewares/errors/index.js')
+// mock
+const { generateProducts } = require('./mock/products.mock.js')
 
 // enviroment variables
 const DB_USER = process.env.DB_USER;
@@ -76,6 +80,7 @@ app.set('view engine', 'handlebars')
 app.set('views', __dirname + '/views')
 // static archives
 app.use(express.static('public'))
+app.use('/product', express.static('public'))
 // app.use('/api', express.static('public'))
 
 // connect-mongo
@@ -105,6 +110,8 @@ app.use('/profile', profileRouter)
 app.use('/sessions', sessionsRouter)
 app.use('/forgot', forgotRouter)
 
+app.use(errorHandler)
+
 // socketMessage = propaga los msj tanto localmente como desde mongoDB
 app.post('/chat', (req, res) => {
   const { message } = req.body;
@@ -121,13 +128,26 @@ app.get('/', async (req, res) => {
 
 */
 
-app.get('/products', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     res.status(200).render('products', { stylesheet: 'products' })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
-})
+});
+
+app.get('/product/:id', async (req, res) => {
+  try {
+    res.status(200).render('oneproduct', { stylesheet: 'oneproduct' })
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+});
+
+app.get('/mockingproducts', async (req, res) => {
+  const products = generateProducts(100)
+  res.send(products)
+});
 
 /*
 
@@ -162,11 +182,9 @@ const enviroment = async () => {
   }
 }
 
-
 const isValidStartData = () => {
   return Boolean(DB_PASS && DB_USER)
 };
-
 
 isValidStartData && enviroment()
 

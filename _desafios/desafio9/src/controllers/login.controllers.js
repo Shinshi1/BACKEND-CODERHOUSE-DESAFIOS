@@ -1,13 +1,14 @@
+const CustomError = require('../services/errors/CustomError.js')
+const EErrors = require('../services/errors/enums.js').default
+
 const showLoginForm = async (req, res) => {
   res.render('login', { title: 'Login', stylesheet: 'login' })
 }
 
 const processLogin = async (req, res) => {
-  if (!req.user) return res.status(400).send({ status: 'error', error: 'Incomplete values' })
-  // console.log(req)
+  // if (!req.user) return res.status(400).send({ status: 'error', error: 'Incomplete values' })
+  if (!req.user) throw CustomError.createError({ name: 'invalidRequestError', message: 'incomplete values', code: EErrors.VALIDATION_ERROR }) //probar este error
   try {
-    console.log('req.session', req.session)
-    console.log('req.session.passport.user', req.session.passport.user)
     req.session.user = {
       _id: req.session.passport.user,
       first_name: req.user.first_name,
@@ -15,7 +16,6 @@ const processLogin = async (req, res) => {
       age: req.user.age,
       email: req.user.email
     }
-    console.log('req.session.user', req.session.user)
     res.send({ status: 'success', payload: req.user })
   } catch (error) {
     res.status(500).json({ error: error.message })

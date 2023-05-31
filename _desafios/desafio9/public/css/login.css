@@ -19,6 +19,15 @@ body {
   align-items: center;
 }
 
+.not-account {
+  margin-top: .7rem;
+}
+
+.signup-link {
+  font-weight: bold;
+  color: #1047a0;
+}
+
 input {
   background-color: transparent;
   border: none;

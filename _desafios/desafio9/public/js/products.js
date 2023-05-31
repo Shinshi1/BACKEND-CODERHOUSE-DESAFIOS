@@ -54,12 +54,25 @@ const eventUploadFetch = (page) => {
       <h5>${item.title}</h5>
       <p>${item.description}.</p>
       <span>Price: $${item.price}</span> <br>
-      <button>Agregar al carrito</button>
+      
+      <button class="btn-ver-producto" data-id=${item._id}>ver producto</button>
   </div>
 </div>
 `
       });
       productContainer.innerHTML = product;
+
+
+      const verProductoButtons = document.querySelectorAll('.btn-ver-producto');
+
+      verProductoButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const productId = button.dataset.id;
+          const productUrl = `/product/${productId}`;
+          window.location.href = productUrl;
+        });
+      });
+
       // pagination
 
       const nextPageClickHandler = () => {
@@ -100,7 +113,6 @@ const eventUploadFetch = (page) => {
 
       const inputPageInputHandler = () => {
         debugger
-        console.log('event input')
         if (page > data.totalPages) {
           page = inputPage.max;
         } else if (page < 1) {
@@ -136,5 +148,5 @@ fetch(SESSION_URL)
       title: `Te damos la bienvenida ${data.user.first_name} ${data.user.last_name}`,
     })
   })
-  .catch(error => console.log(error))
+  .catch(error => console.error(error))
 

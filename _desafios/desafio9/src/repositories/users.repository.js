@@ -43,7 +43,6 @@ class UserRepository {
   getUserByEmailDTOSubset = async (email, ...arraySubset) => {
     let result = await this.dao.findByEmail(email);
     const userDTO = UserDTO.createSubset(result, ...arraySubset);
-    console.log(userDTO)
     return userDTO
   }
 }

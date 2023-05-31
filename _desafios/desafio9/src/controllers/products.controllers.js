@@ -114,9 +114,24 @@ const updateProduct = async (req, res) => {
   }
 }
 
+const findProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await productsService.findProductById(id);
+    if (response) {
+      res.status(200).send({ message: 'Producto encontrado', response });
+    } else {
+      res.status(500).send({ message: 'Producto no encontrado', response });
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+}
+
 module.exports = {
   getProducts,
   saveProduct,
   deleteProduct,
   updateProduct,
+  findProduct
 }
