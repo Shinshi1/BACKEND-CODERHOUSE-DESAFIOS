@@ -5,6 +5,7 @@ const showSignupForm = async (req, res) => {
 const processSignup = async (req, res) => {
   try {
     const user = req.user;
+    req.logger.info('registered user ')
     res.status(201).json({ message: 'success', data: user })
   } catch (error) {
     res.status(500).json({ error: error.message })

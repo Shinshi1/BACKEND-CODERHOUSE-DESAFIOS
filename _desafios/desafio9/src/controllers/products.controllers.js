@@ -28,6 +28,7 @@ const getProducts = async (req, res) => {
     })
 
   } catch (error) {
+    req.logger.error(`error getting products: ${error.message}`)
     res.status(500).send(error.message)
   }
 }
@@ -60,6 +61,7 @@ const saveProduct = async (req, res) => {
     })
     res.status(200).send({ message: 'Producto creado', response })
   } catch (error) {
+    req.logger.error(`error saving product: ${error.message}`)
     res.status(500).send(error.message)
   }
 }
@@ -76,6 +78,7 @@ const deleteProduct = async (req, res) => {
       res.status(500).send({ message: 'Producto no encontrado', response });
     }
   } catch (error) {
+    req.logger.error(`error deleting products: ${error.message}`)
     res.status(500).send(error.message);
   }
 }
@@ -110,6 +113,7 @@ const updateProduct = async (req, res) => {
     })
     res.status(200).send({ message: 'Producto actualizado', response })
   } catch (error) {
+    req.logger.error(`error updating products: ${error.message}`)
     res.status(500).send(error.message)
   }
 }
@@ -124,6 +128,7 @@ const findProduct = async (req, res) => {
       res.status(500).send({ message: 'Producto no encontrado', response });
     }
   } catch (error) {
+    req.logger.error(`error finding products: ${error.message}`)
     res.status(500).send(error.message);
   }
 }

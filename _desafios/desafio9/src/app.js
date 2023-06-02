@@ -24,6 +24,8 @@ const initializePassport = require('./config//passport.config.js')
 const errorHandler = require('./middlewares/errors/index.js')
 // mock
 const { generateProducts } = require('./mock/products.mock.js')
+// logger
+const { addLogger } = require('./utils/logger.js')
 
 // enviroment variables
 const DB_USER = process.env.DB_USER;
@@ -43,21 +45,10 @@ const signupRouter = require('./routes/signup.routes.js')
 const profileRouter = require('./routes/profile.routes.js')
 const sessionsRouter = require('./routes/sessions.routes.js')
 const forgotRouter = require('./routes/forgot.routes.js')
-// products
-// const { gestionProd } = require('./dao/fileSystem/ProductManager')
-const { messageRoute } = require('./routes/message.routes')
-const MongoStore = require('connect-mongo')
+const loggerRouter = require('./routes/logger.routes.js')
 
-// let products = []
-// const fetchProducts = async () => {
-//   try {
-//     products = await gestionProd.getProducts()
-//   } catch (error) {
-//     console.error('Error: not product found')
-//     throw new Error(error)
-//   }
-// }
-// fetchProducts()
+const { messageRoute } = require('./routes/message.routes.js')
+const MongoStore = require('connect-mongo')
 
 
 // port
@@ -73,6 +64,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+app.use(addLogger)
 
 // view engine
 app.engine('handlebars', handlebars.engine())
@@ -85,7 +77,7 @@ app.use('/product', express.static('public'))
 
 // connect-mongo
 app.use(session({
-  secret: MONGOSECRET,//a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
+  secret: MONGOSECRET,
   resave: true,
   saveUninitialized: true,
   store: MongoStore.create({
@@ -109,6 +101,7 @@ app.use('/signup', signupRouter)
 app.use('/profile', profileRouter)
 app.use('/sessions', sessionsRouter)
 app.use('/forgot', forgotRouter)
+app.use('/logger-test', loggerRouter)
 
 app.use(errorHandler)
 
@@ -119,14 +112,6 @@ app.post('/chat', (req, res) => {
 
   res.send('ok');
 });
-
-/*
-
-app.get('/', async (req, res) => {
-  res.status(200).render('home', { products: products })
-})
-
-*/
 
 app.get('/', async (req, res) => {
   try {
@@ -149,18 +134,6 @@ app.get('/mockingproducts', async (req, res) => {
   res.send(products)
 });
 
-/*
-
-app.get('/carts/:cid', async (req, res) => {
-  res.status(200).render('carts', { stylesheet: 'carts' })
-})
-
-app.get('/realtimeproducts', async (req, res) => {
-  const products = await gestionProd.getProducts()
-  res.status(200).render('realtimeproducts', { products: products })
-})
-*/
-
 // Socket Events
 sockets(socketServer)
 
@@ -170,7 +143,6 @@ app.get('/messages', (req, res) => {
 });
 
 // Mongoose
-
 const enviroment = async () => {
   mongoose.set('strictQuery', true)
   try {

@@ -2,7 +2,7 @@ const passport = require('passport')
 const local = require('passport-local')
 const GitHubStrategy = require('passport-github2')
 const { usersService } = require('../repositories/index.js')
-const { createHash, isValidPassword } = require('../utils.js')
+const { createHash, isValidPassword } = require('../utils/bcryptUtils.js')
 
 const CLIENTID = process.env.CLIENTID;
 const CLIENTSECRET = process.env.CLIENTSECRET;

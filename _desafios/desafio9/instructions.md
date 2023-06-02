@@ -1,9 +1,5 @@
 # Desafío Entregable 9
 
-Fecha: April 18, 2023 → April 25, 2023
-Hecho: No
-Proyecto: Programación Backend (https://www.notion.so/Programaci-n-Backend-61ef391715bb4a23add5da040ced0165)
-
 # **Logging y performance**
 
 ## ****Implementación de logger****
