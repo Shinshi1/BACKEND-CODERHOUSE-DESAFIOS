@@ -1,0 +1,44 @@
+<nav class="nav">
+  <div>
+    <ul>
+      <li><a href="/">Products</a></li>
+      <li><a href="/login">Login</a></li>
+      <li><a href="/profile">Profile</a></li>
+      <li><a href="/signup">Signup</a></li>
+      <li><a href="/chat">Chat</a></li>
+      <li><a href="/forgot">Forgot</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <div class="section-1">
+    <h1>Profile</h1>
+    <div class="info-container">
+      <div class="user-container">
+        <h2>{{user.first_name}} {{user.last_name}}</h2>
+        <span>{{user.age}} años</span>
+      </div>
+      <div class="logout-container">
+        <button id="logout">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cartContainer">
+    <h3>Cart</h3>
+    <div class="cart" id="cartItems"></div>
+    <div class="button-container">
+      <button id="clear-cart-button">Vaciar Carrito</button>
+      <button id="buy-cart-button">Comprar</button>
+    </div>
+  </div>
+  <div class="ticket-container">
+    <h3>Tickets</h3>
+    <div class="ticket-list" id="tickets">
+    </div>
+  </div>
+</main>
+
+
+<script src="/js/profile.js"></script>
