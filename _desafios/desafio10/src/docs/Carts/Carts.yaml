@@ -7,5 +7,46 @@ paths:
       responses: 
        "200":
         description: Los carritos fueron obtenidos satisfactoriamente de la base de datos
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#components/schemas/Cart'
        "500":
         description: Error interno del servidor usualmente generado por una query defectuosa o un fallo de conexión con la base de datos
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id: 
+          type: objectId
+          description: Id autogenerado de mongo
+        products:
+          type: array
+          items:
+            # $ref: '#/components/schemas/Product'
+            type: object
+            properties:
+              product:
+                type: string
+                format: ObjectId
+                description: Referencia al producto
+              quantity:
+                type: number
+                description: Cantidad del producto en el carrito
+            required: 
+            - product
+            -  quantity
+          description: Lista de productos en el carrito
+      required: 
+        - products
+      example:
+        _id: ObjectId("638bf81433a3f5b32e6dc937e35")
+        products: [
+          {
+            product: ObjectId("638b8c343a3f5b5e6dc937e"),
+            quantity: 100
+          }
+          ]

@@ -13,7 +13,7 @@ const getProducts = async (req, res) => {
       if (Boolean(product.docs)) return 'success'
       else return 'error'
     }
-    res.send({
+    res.status(200).send({
       status: productExist(),
       payload: product.docs,
       totalDocs: product.totalDocs,
@@ -75,7 +75,7 @@ const deleteProduct = async (req, res) => {
     if (Boolean(response) === true) {
       res.status(200).send({ message: 'Producto eliminado', response });
     } else {
-      res.status(500).send({ message: 'Producto no encontrado', response });
+      res.status(404).send({ message: 'Producto no encontrado', response });
     }
   } catch (error) {
     req.logger.error(`error deleting products: ${error.message}`)
@@ -125,7 +125,7 @@ const findProduct = async (req, res) => {
     if (response) {
       res.status(200).send({ message: 'Producto encontrado', response });
     } else {
-      res.status(500).send({ message: 'Producto no encontrado', response });
+      res.status(404).send({ message: 'Producto no encontrado', response });
     }
   } catch (error) {
     req.logger.error(`error finding products: ${error.message}`)
