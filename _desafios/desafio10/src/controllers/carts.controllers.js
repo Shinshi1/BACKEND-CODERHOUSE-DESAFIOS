@@ -3,7 +3,7 @@ const { cartsService, productsService, ticketService } = require('../repositorie
 const getCarts = async (req, res) => {
   try {
     const result = await cartsService.getCarts()
-    res.send(result);
+    res.status(200).send(result);
   } catch (error) {
     res.status(500).send(error.message)
     req.logger.error(`Error getting carts: ${error.message}`)
@@ -22,9 +22,9 @@ const saveCart = async (req, res) => {
 }
 
 const deleteCart = async (req, res) => {
-  const { id } = req.params;
+  const { cid } = req.params;
   try {
-    const response = await cartsService.deleteCart(id);
+    const response = await cartsService.deleteCart(cid);
 
     if (Boolean(response) === true) {
       res.status(200).send({ message: 'Carrito eliminado', response });
@@ -42,7 +42,7 @@ const addOneProductToCart = async (req, res) => {
   const product = req.body;
   try {
     const response = await cartsService.addSingleProductToCart(cid, product);
-    res.status(200).send({ message: 'Carrito actualizado!', response })
+    res.status(200).send({ message: 'Producto agregado al carrito', response })
   } catch (error) {
     req.logger.error(`Error adding a product to cart: ${error.message}`)
     res.status(500).send(error.message);
@@ -68,7 +68,7 @@ const addProductsToCart = async (req, res) => {
 
   try {
     await cartsService.updateProduct(cid, pid, quantity)
-    res.status(200).send({ message: `quantity of product ${pid} in cart ${cid} increased by ${quantity}` })
+    res.status(200).send({ message: `The ${quantity} of the product ${pid} has been added to the ${cid} cart` })
 
   } catch (error) {
     req.logger.error(`Error adding products to cart: ${error.message}`)

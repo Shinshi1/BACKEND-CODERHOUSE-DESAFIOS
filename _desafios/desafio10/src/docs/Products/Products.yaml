@@ -110,7 +110,8 @@ components:
       type: object
       properties:
         _id:
-          type: objectId
+          type: string
+          format: ObjectId
           description: ID autogenerado de mongo
           readOnly: true
         title:
