@@ -1,0 +1,188 @@
+paths:
+  /api/products/:
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - Products
+      responses: 
+       "200":
+        description: Los productos fureron obtenidos satisfactoriamente de la base de datos
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#components/schemas/Product'
+       "500":
+        description: Error interno del servidor usualmente generado por una query defectuosa o un fallo de conexión con la base de datos
+    post:
+      summary: Crear un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/requestBodies/productData'
+      responses:
+        "200":
+          description: Producto creado
+        "400":
+          description: Faltan datos para crear el producto
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo de conexión con la base de datos
+  /api/products/{pid}:
+    delete:
+      summary: Eliminar un producto específico
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto que se desea eliminar
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Producto eliminado 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mensaje de confirmación de eliminación
+                  response:
+                    type: object
+                    $ref: '#components/schemas/Product'
+        "404":
+          description: Producto no encontrado
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo de conexión con la base de datos   
+    put:
+      summary: Actualizar un producto específico
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto que se desea actualizar
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/requestBodies/productData'
+      responses:
+        "200":
+          description: Producto actualizado
+        "400":
+          description: Error desde el cliente por falta de datos
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo de conexión con la base de datos
+    get:
+      summary: Obtener un producto específico
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto que se desea obtener
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Producto encontrado 
+        "404":
+          description: Producto no encontrado 
+        "500":
+          description: Error interno del servidor usualmente generado por una query defectuosa o un fallo de conexión con la base de datos
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          description: ID autogenerado de mongo
+          readOnly: true
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        code:
+          type: string
+          description: Codigo unico del producto generado por su creador
+        price:
+          type: number
+          description: Precio del producto
+        thumbnail:
+          type: string
+          description: URL de la imagen del producto
+        stock:
+          type: number
+          description: Cantidad stock del producto
+        category:
+          type: string
+          description: Categoría a la que pertenece el producto
+        status:
+          type: boolean
+          description: Indica la disponibilidad del producto
+      example:
+        _id: ObjectId("638b8c343a3f5b5e6dc937e")
+        title: Empanada Arabe
+        description: Es una empanada con forma triangular, con un toque acido gracias al sabor que le da el limón
+        code: emapanada-arabe-2023
+        price: 5
+        thumbnail: https://images.pexels.com/photos/12917975/pexels-photo-12917975.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
+        stock: 100
+        category: comida
+        status: true
+  requestBodies:
+    productData:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripción del producto
+        code:
+          type: string
+          description: Codigo del producto, este campo es único
+        price:
+          type: number
+          description: Precio del producto
+        thumbnail:
+          type: string
+          description: Dirección url de la imagen del producto
+        stock:
+          type: number
+          description: Cantidad de productos disponibles
+        category:
+          type: string
+          description: Categoría con la que se clasifica el producto
+        status:
+          type: boolean
+          description: Indica el estado de disponibilidad de producto
+      example: 
+        title: Empanada Arabe
+        description: Es una empanada con forma triangular, con un toque acido gracias al sabor que le da el limón
+        code: emapanada-arabe-2023
+        price: 5
+        thumbnail: https://images.pexels.com/photos/12917975/pexels-photo-12917975.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1
+        stock: 100
+        category: comida
+        status: true
+      

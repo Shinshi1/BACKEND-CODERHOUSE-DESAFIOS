@@ -1,0 +1,38 @@
+<h1>Administración de Productos</h1>
+
+<form>
+  <h2>Nuevo Producto</h2>
+  <label for="nombre">Nombre del producto:</label>
+  <input type="text" id="productName" name="nombre" required><br><br>
+
+  <label for="precio">Precio:</label>
+  <input type="number" id="productPrice" name="precio" step="0.01" required><br><br>
+
+  <label for="stock">Stock:</label>
+  <input type="number" id="productStock" name="stock" required><br><br>
+
+  <label for="codigo">Codigo del producto:</label>
+  <input type="text" id="productCode" name="codigo" required><br><br>
+
+  <label for="categoria">Categoría:</label>
+  <input type="text" id="productCategory" name="categoria" required><br><br>
+
+  <label for="descripcion">Descripción:</label><br>
+  <textarea id="productDescription" name="descripcion" rows="4" cols="50" required></textarea><br><br>
+
+  <label for="imagen">Imagen URL:</label>
+  <input type="text" id="productImage" name="imagen" required><br><br>
+
+  <input type="submit" id="createProduct" value="Crear Producto">
+</form>
+
+<form>
+  <h2>Eliminar Producto</h2>
+  <label for="productId">ID del producto:</label>
+  <input type="text" id="productId" name="productId" required><br><br>
+
+  <input type="submit" id="deleteProduct" value="Eliminar Producto">
+</form>
+
+{{!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+<script src="/js/administration.js"></script>
