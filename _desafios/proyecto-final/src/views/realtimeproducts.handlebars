@@ -1,0 +1,59 @@
+<h1>Productos en tiempo real</h1>
+
+<h2>Fromulario para añadir productos</h2>
+{{!-- formulario --}}
+<form action="#" method="post" id="productForm">
+    <ul>
+        <li>
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="product_name">
+        </li>
+        <li>
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="product_description">
+        </li>
+        <li>
+            <label for="code">Code:</label>
+            <input type="text" id="code" name="product_code"></input>
+        </li>
+        <li>
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="product_price"></input>
+        </li>
+        <li>
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="product_stock"></input>
+        </li>
+        <li>
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="product_category"></input>
+        </li>
+        <li>
+            {{!-- quizas deba usar multer --}}
+            <label for="thumbnail">Thumbnail:</label>
+            <input type="text" id="thumbnail" name="product_thumbnail"></input>
+        </li>
+    </ul>
+    <button id="btnAgregar">Agregar</button>
+    <button id="btnEliminar">Eliminar</button>
+</form>
+
+<h2>Lista de Productos</h2>
+{{#each products}}
+<ul data-code="{{code}}">
+    <li>name: {{title}}</li>
+    <li>description: {{description}}</li>
+    <li>code: {{code}}</li>
+    <li>price: {{price}}</li>
+    <li>status: {{status}}</li>
+    <li>stock: {{stock}}</li>
+    <li>category: {{category}}</li>
+    {{!-- <li>{{this.thumbnail}}</li> --}}
+</ul>
+{{/each}}
+<div id="productContainer">
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realtimeproducts.js"></script>
