@@ -11,8 +11,7 @@ describe('Product router test cases', () => {
   });
 
   before(async () => {
-    const responseAuthentication = await requester.post('/login').send({ username: 'erwin@mail.com', password: '1234' })
-    console.log(responseAuthentication.statusCode)
+    await requester.post('/login').send({ username: 'erwin@mail.com', password: '1234' })
   });
 
   let pid
