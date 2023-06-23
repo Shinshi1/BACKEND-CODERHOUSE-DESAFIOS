@@ -3,6 +3,7 @@ const supertest = require('supertest');
 const { cartsRouter } = require('../../src/routes/carts.routes.js')
 const { app } = require('../../src/app');
 const { dropUsers } = require('../setup.test.js');
+
 const requester = supertest.agent(app);
 
 
@@ -36,7 +37,7 @@ describe('Carts router test cases', () => {
 
   it('[GET] /api/carts - Should get all the carts', async () => {
     const response = await requester.get('/api/carts/');
-    expect(Array.isArray(response.body)).to.be.eqls(true)
+    expect(Array.isArray(response.body)).to.be.eqls(true);
   });
 
   it('[POST] /api/carts - Should create a cart', async () => {

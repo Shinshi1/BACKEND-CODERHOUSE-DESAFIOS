@@ -14,7 +14,7 @@ const processSignup = async (req, res) => {
 
 const showFailedSignup = async (req, res) => {
   console.log('Failed Strategy');
-  res.send('Failed');
+  res.status(302).send('Failed');
 }
 
 module.exports = {
