@@ -44,7 +44,7 @@ const initializePassport = () => {
           console.log("User doesn't exist")
           return done(null, false, { message: "User doesn't exist" })
         }
-        if (!isValidPassword(password, user.password)) return done(null, false); //posible error aqui
+        if (!isValidPassword(password, user.password)) return done(null, false);
         return done(null, user)
       } catch (error) {
         return done(error)
